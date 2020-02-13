@@ -1,0 +1,140 @@
+from vehicles import Vehicles, Car, Van, Truck
+from vehiclecosts import VehicleCosts, VehicleCost
+from reservations import Reservations
+
+VEHICLE_TYPES = ('Car', 'Van', 'Truck')
+VEHICLES_FILENAME = 'VehiclesStock.txt'
+VEHICLE_COSTS_FILENAME = 'RentalCost.txt'
+
+
+class InvalidFileFormatError(Exception):
+    """Exception indicating invalid file name"""
+
+    def __init__(self, header, file_name):
+        self.__header = header
+        self.__file_name = file_name
+
+    def __str__(self):
+        return 'FILE FORMAT ERROR: File header ' + self.__header + \
+            ' expected in file ' + self.__file_name
+
+
+class SystemInterface:
+    def __init__(self):
+        self.__vehicles = Vehicles()
+        self.__vehicle_costs = VehicleCosts()
+        self.__reservations = Reservations()
+        self.__vehicle_info_file = None
+
+        try:
+            self.__vehicle_info_file = open(VEHICLES_FILENAME, 'r')
+            self.__rental_costs_file = open(VEHICLE_COSTS_FILENAME, 'r')
+
+            self.__populateVehicles(self.__vehicle_info_file)
+            self.__populateCosts(self.__rental_costs_file)
+        except InvalidFileFormatError as e:
+            print(e)
+            raise IOError
+        except IOError:
+            if self.__vehicle_info_file is None:
+                print('FILE NOT FOUND:', VEHICLES_FILENAME)
+            else:
+                print('FILE NOT FOUND:', VEHICLE_COSTS_FILENAME)
+            raise IOError
+
+    def numAvailVehicles(self, vehicle_type):
+        return self.__vehicles.numAvailVehicles(vehicle_type)
+
+    def getVehicle(self, vin):
+        return self.__vehicles.getVehicle(vin)
+
+    def getVehicleTypes(self):
+        return VEHICLE_TYPES
+
+    def getVehicleCosts(self, vehicle_type):
+        return self.__vehicle_costs.getVehicleCost(vehicle_type).getCosts()
+
+    def getAvailVehicles(self, vehicle_type):
+        avail_vehicles = self.__vehicles.getAvailVehicles(vehicle_type)
+        return [veh for veh in avail_vehicles]
+
+    def isReserved(self, vin):
+        return self.__reservations.isReserved(vin)
+
+    def findReservations(self, credit_card):
+        return self.__reservations.findReservation(credit_card)
+
+    def addReservation(self, resv):
+        self.__reservations.addReservation(resv)
+
+    def cancelReservation(self, credit_card):
+        vin = self.__reservations.getVinForReserv(credit_card)
+
+        self.__vehicles.unreserveVehicle(vin)
+        self.__reservations.cancelReservation(credit_card)
+
+    def calcRentalCost(self, vehicle_type, rental_period,
+                       want_insurance, miles_driving):
+        return self.__vehicle_costs.calcRentalCost(vehicle_type, rental_period,
+                                                   want_insurance,
+                                                   miles_driving)
+
+    # ---- Private Methods
+
+    def __populateVehicles(self, vehicle_file):
+        empty_str = ''
+
+        # init vehicle string file headers
+        vehicle_file_headers = ('#CARS#', '#VANS#', '#TRUCKS#')
+        vehicle_type_index = 0
+
+        # read first line of file (#CARS# expected)
+        vehicle_str = vehicle_file.readline()
+        vehicle_info = vehicle_str.rstrip().split(',')
+        file_header_found = vehicle_info[0]
+        expected_header = vehicle_file_headers[0]
+
+        if file_header_found != expected_header:
+            raise InvalidFileFormatError(expected_header, VEHICLES_FILENAME)
+        else:
+            vehicle_str = vehicle_file.readline()
+            print('vehicle_str: ', vehicle_str)
+
+            while vehicle_str != empty_str:
+                vehicle_info = vehicle_str.rstrip().split(',')
+                # print('vehicle_info: ', vehicle_info)
+
+                if vehicle_info[0][0] == '#':
+                    vehicle_type_index = vehicle_type_index + 1
+                    file_header_found = vehicle_info[0]
+                    expected_header = vehicle_file_headers[vehicle_type_index]
+
+                    if file_header_found != expected_header:
+                        raise InvalidFileFormatError(expected_header,
+                                                     VEHICLES_FILENAME)
+                else:
+                    # print('Vehicle Info = ', vehicle_info)
+                    if file_header_found == '#CARS#':
+                        # print('Got here')
+                        vehicle = Car(*vehicle_info)
+                    elif file_header_found == '#VANS#':
+                        vehicle = Van(*vehicle_info)
+                    elif file_header_found == '#TRUCKS#':
+                        vehicle = Truck(*vehicle_info)
+
+                    self.__vehicles.addVehicle(vehicle)
+
+                vehicle_str = vehicle_file.readline()
+
+    def __populateCosts(self, cost_file):
+        cost_file.readline()
+        cost_str = cost_file.readline()
+
+        for veh_type in VEHICLE_TYPES:
+            cost_info = cost_str.rstrip().split(',')
+
+            for cost_item in cost_info:
+                cost_item = cost_item.strip()
+            self.__vehicle_costs.addVehicleCost(veh_type,
+                                                VehicleCost(*cost_info))
+            cost_str = cost_file.readline()

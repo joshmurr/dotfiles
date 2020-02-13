@@ -1,0 +1,8 @@
+def stair(n):
+    for i in range(n):
+        line = []
+        line.append(' ' * (n-i))
+        line.append('#' * (i+1))
+        print("".join(line))
+
+stair(6)

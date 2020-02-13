@@ -1,0 +1,18 @@
+using UnityEngine;
+using System;
+using OscJack;
+
+public class thing : MonoBehaviour {
+
+    void Start(){
+
+    }
+
+    void Update(){
+        if(Input.GetKeyDown("space")){
+            Debug.Log("space pressed, should be sending OSC");
+        }
+
+    }
+
+}

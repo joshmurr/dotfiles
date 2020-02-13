@@ -1,0 +1,177 @@
+(function () {
+    'use strict';
+
+    var wordcountApp = angular.module('WordcountApp', []);
+
+    wordcountApp.controller('WordcountController', ['$scope', '$log', '$http', '$timeout',
+        function($scope, $log, $http, $timeout) {
+            $scope.submitButtonText = 'Submit';
+            $scope.loading = false;
+            $scope.urlerror = false;
+            $scope.getResults = function() {
+                var userInput = $scope.url; // <input ng-model="url" ... >
+                $http({
+                    method:'POST',
+                    url: '/start', 
+                    data: {'url': userInput}
+                }).then(function successCallback(response){
+                    getWordCount(response.data);
+                    $scope.wordcounts = null;
+                    $scope.loading = true;
+                    $scope.urlerror = false;
+                    $scope.submitButtonText = 'Loading...';
+                }, function errorCallback(response){
+                    $log.log(response.data); 
+                });
+            };
+
+            function getWordCount(jobID){
+                var timeout = '';
+
+                var poller = function() {
+                    $http({
+                        method: 'GET',
+                        url: '/results/'+jobID
+                    }).then(function successCallback(response){
+                        // success
+                        if(response.status === 202){
+                            $log.log(response.data, response.status);
+                        } else if (response.status === 200) {
+                            $scope.loading = false;
+                            $scope.submitButtonText = 'Submit';
+                            $scope.wordcounts = response.data;
+                            $timeout.cancel(timeout);
+                            return false;
+                        }
+                        // continue to call the poller() function every 2 seconds
+                        // until the timeout is cancelled
+                        timeout = $timeout(poller, 2000);
+                        
+                    }, function errorCallback(response){
+                        // error
+                        $log.log("Error in getWordCount( poller () )...");
+                        $scope.loading = false;
+                        $scope.submitButtonText = "Submit";
+                        $scope.urlerror = true;
+                        $log.log(response.data, response.status);
+                    });
+                }
+                poller();
+            }
+    }])
+    .directive('wordCountChart', ['$parse', function($parse){
+        return {
+            restrict: 'E',
+            replace: true,
+            template: '<div id="chart"></div>',
+            link: function(scope) {
+                scope.$watch('wordcounts', function(){
+                    d3.select('#chart').selectAll('*').remove();
+                    var data = scope.wordcounts;
+                    for(var word in data){
+                        d3.select('#chart')
+                          .append('div')
+                          .selectAll('div')
+                          .data(word[0])
+                          .enter()
+                          .append('div')
+                          .style('width', function() {
+                              return (data[word].count * 10) + 'px';
+                          })
+                          .text(function(d){
+                              return data[word].word;
+                          });
+                    }
+                }, true);
+            }
+        };
+        
+    }])
+    .controller('DisplayResultsController', ['$scope', '$log', '$http',
+        function($scope, $log, $http) {
+            $scope.getAllEntries = function() {
+                $scope.selected_item = null;
+                $http({
+                    method:'GET',
+                    url:'/get_all_entries'
+                }).then(function successCallback(response){
+                    $scope.rows = response.data;
+                }, function errorCallback(response){
+                    $log.log(response.data);
+                });
+            };
+
+            $scope.toggle_selected = function(item){
+                if(!$scope.selected_item){
+                    $scope.selected_item = item;
+                    $scope.id_box = item.id;
+                } else {
+                    if($scope.selected_item.id == item.id){
+                        $scope.selected_item = null;
+                    } else {
+                        $scope.selected_item = item;
+                        $scope.id_box = item.id;
+                    }
+                }
+            };
+
+
+            $scope.delete_item = function (item=$scope.selected_item) {
+                $http({
+                    method: 'GET',
+                    url: '/delete',
+                    params: {'id':$scope.selected_item.id}
+                }).then(function successCallback(response){
+                    $log.log("SUCCESS");
+                    $http({
+                        method:'GET',
+                        url:'/get_all_entries'
+                    }).then(function successCallback(response){
+                        $scope.rows = response.data;
+                    }, function errorCallback(response){
+                        $log.log(response.data);
+                    });
+                }, function errorCallback(response){
+                    $log.log("FAILURE");
+                });
+
+            };
+
+
+
+
+
+            /*
+            $scope.submitType = '';
+            $scope.setSubmitType = function (text) {
+                $scope.submitType = text;
+            }
+
+
+            $scope.processDisplaySubmit = function (text = $scope.submitType){
+                if($scope.submitType != ''){
+                    if(text == "view"){
+                        // GO TO DISPLAY_ALL
+                        $http({
+                            method: 'GET',
+                            url: '/display_single',
+                            params: {'id':$scope.selected_item.id}
+                        }).then(function successCallback(response){
+                            $log.log("SUCCESS");
+
+                        }, function errorCallback(response){
+                            $log.log("FAILURE");
+                        });
+                    } else if (text == "delete"){
+                        // DELETE ENTRY
+                        // GO TO DISPLAY ALL
+                        $log.log("DELETE");
+                        
+                    }
+                } else {
+                    $log.log('$scope.submitType is NOTHING.');
+                }
+            };
+            */
+    }])
+}());

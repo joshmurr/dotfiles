@@ -1,0 +1,29 @@
+---
+layout: post
+title: "Vector Maths"
+date: 2019-03-06
+---
+
+I've been working on re-writing Daniel Shiffman's _Nature of Code_ boid/vehicle chapter in OpenFrameworks. It can be seen [here on Github](https://github.com/joshmurr/ofxBoids). As I say in the README [it has been done before](https://github.com/after12am/ofxBoids) but I still want to do it as an exercise for myself, to furthur learn OF and C++, and as I learnt in my [previous post](https://joshmurr.github.io/2019/03/02/old-code-case-study.html) I think it is a great learning experience to really pick apart something which you don't _quite_ understand. Vector mathematics is something I'm still working on and find very ineresting, but converting the more theoretical, pure mathematics into useable code does lead to some head scratching.
+
+Re-writing the code pretty much from the book got me to the point where I could draw a small arrow graphic which would follow and point at the mouse. But I ran in to some difficulty really understanding the maths behind it.
+
+![follow_mouse](../../../assets/images/vectors/follow_mouse.gif)
+
+So far the OF re-write (port? do you call it a 'port'?) has got to the basic movement where the vehicle can 'seek' or 'arrive' at a target by slowing it's acceleration when it is within a certain distance. This meant I could set a 'prey' vehicle to move randomly from point to point every second, with another 'predator' vehicle chasing it at a slower speed.
+
+![pred_prey](../../../assets/images/vectors/simple_chase.gif)
+
+So to get my head around it, I re-wrote it all _again_ but this time in Javascript. This is partly because to get a quick prototype up and running, particularly if it's a visual thing, I do find JS to be very useful. It's really quick and easy to start drawing on the screen, and not having to *compile and run* everytime is really handy.
+
+I wrote a simple PVector class, as is found in the Processing library (with the help of [Khan Academy](https://www.khanacademy.org/computing/computer-programming/programming-natural-simulations/programming-vectors/a/static-functions-vs-instance-methods) of course) and was able to get two vectors drawn on screen. The 'ah ha!' moment with when I started to think of the 'point' vectors as arrows from the origin (0,0) _to_ the given points instead. Obtaining the director vector 'dir' I know is achieved by subtracting the target location from the current location, but it was only once I started seeing the vectors graphically did this make sense.
+
+The second 'ah ha!' moment with when I realised the screen co-ordinates has the x-axis flipped compared to a standard grid. All the maths I was doing by hand would give me a negative x-value compared to what I was getting on screen. 
+
+So I now have the JS and the OF/C++ libraries on the go and I'm sure I'll develop both as it seems like a complimentary pair: one as a prototyping platform and the other as the more robust software thing with which I hope to create flocking simulations.
+
+
+![js_vectors](../../../assets/images/vectors/vector_subtraction_arrow.gif)
+
+<br>
+Josh

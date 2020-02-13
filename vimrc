@@ -1,311 +1,222 @@
-" Fisa-vim-config
-" http://fisadev.github.io/fisa-vim-config/
-" version: 8.3.1
 
-" ============================================================================
-" Vim-plug initialization
-" Avoid modify this section, unless you are very sure of what you are doing
+execute pathogen#infect('bundle/{}', '~/dotfiles/vim/bundle/{}')
 
-let vim_plug_just_installed = 0
-let vim_plug_path = expand('~/.vim/autoload/plug.vim')
-if !filereadable(vim_plug_path)
-    echo "Installing Vim-plug..."
-    echo ""
-    silent !mkdir -p ~/.vim/autoload
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    let vim_plug_just_installed = 1
-endif
+set nocompatible " not vi compatible
 
-" manually load vim-plug the first time
-if vim_plug_just_installed
-    :execute 'source '.fnameescape(vim_plug_path)
-endif
+"------------------
+" Syntax and indent
+"------------------
+syntax on " turn on syntax highlighting
+set showmatch " show matching braces when text indicator is over them
 
-" Obscure hacks done, you can now modify the rest of the .vimrc as you wish :)
+" highlight current line, but only in active window
+augroup CursorLineOnlyInActiveWindow
+    autocmd!
+    autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+    autocmd WinLeave * setlocal nocursorline
+augroup END
 
-" ============================================================================
-" Active plugins
-" You can disable or add new ones here:
-
-" this needs to be here, so vim-plug knows we are declaring the plugins we
-" want to use
-call plug#begin('~/.vim/plugged')
-
-" Plugins from github repos:
-
-"Formatters
-" Plug 'tell-k/vim-autopep8'
-" Code commenter
-Plug 'scrooloose/nerdcommenter'
-" Airline
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-" Terminal Vim with 256 colors colorscheme
-Plug 'fisadev/fisa-vim-colorscheme'
-" Python autocompletion, go to definition.
-" Plug 'davidhalter/jedi-vim'
-"
-" Better Autocompletion
-Plug 'Shougo/neocomplcache.vim'
-"
-" YCM Autocompletion
-" Plug 'ycm-core/YouCompleteMe'
-"
-" Python and other languages code checker
-Plug 'scrooloose/syntastic'
-" Paint css colors with the real color
-Plug 'lilydjwg/colorizer'
-" Tmuxline
-Plug 'edkolev/tmuxline.vim'
-" Surroundings
-Plug 'tpope/vim-surround' 
-Plug 'tpope/vim-repeat' 
-" C++ Switch Between h and cpp files
-Plug 'vim-scripts/a.vim'
-" Colourschemes
-Plug 'dracula/vim'
-Plug 'JBakamovic/yaflandia'
-" Semantic Syntax Highlighting
-Plug 'jaxbot/semantic-highlight.vim'
-" UltiSnips (Snippets)
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-" NERDTree
-Plug 'scrooloose/nerdtree'
-" LaTeX
-Plug 'vim-scripts/LaTeX-Suite-aka-Vim-LaTeX'
-Plug 'tikhomirov/vim-glsl'
-
-if has('python')
-    " YAPF formatter for Python
-"    Plug 'pignacio/vim-yapf-format'
-"    Plug 'mindriot101/vim-yapf'
-     Plug 'tell-k/vim-autopep8'
-endif
-" Relative numbering of lines (0 is the current line)
-" (disabled by default because is very intrusive and can't be easily toggled
-" on/off. When the plugin is present, will always activate the relative 
-" numbering every time you go to normal mode. Author refuses to add a setting 
-" to avoid that)
-" Plug 'myusuf3/numbers.vim'
-
-" Plugins from vim-scripts repos:
-
-" Tell vim-plug we finished declaring plugins, so it can load them
-call plug#end()
-
-" ============================================================================
-" Install plugins the first time vim runs
-
-if vim_plug_just_installed
-    echo "Installing Bundles, please ignore key map error messages"
-    :PlugInstall
-endif
-
-" ============================================================================
-" Vim settings and mappings
-" You can edit them as you wish
-
-" use 256 colors when possible
-if (&term =~? 'mlterm\|xterm\|xterm-256\|screen-256\|256color') || has('nvim')
-	let &t_Co = 256
-    colorscheme molokai 
+" vim can autodetect this based on $TERM (e.g. 'xterm-256color')
+" but it can be set to force 256 colors
+" set t_Co=256
+if has('gui_running')
+    colorscheme solarized
+    let g:lightline = {'colorscheme': 'solarized'}
+elseif &t_Co < 256
+    colorscheme default
+    set nocursorline " looks bad in this mode
 else
-    colorscheme delek
+    set background=dark
+    let g:solarized_termcolors=256 " instead of 16 color with mapping in terminal
+    colorscheme solarized
+    " customized colors
+    highlight SignColumn ctermbg=234
+    highlight StatusLine cterm=bold ctermfg=245 ctermbg=235
+    highlight StatusLineNC cterm=bold ctermfg=245 ctermbg=235
+    let g:lightline = {'colorscheme': 'dark'}
+    highlight SpellBad cterm=underline
+    " patches
+    highlight CursorLineNr cterm=NONE
 endif
 
-set t_Co=256
-set background=dark
-set term=screen-256color
-set clipboard=unnamed
-set wrap
-" no vi-compatible
-set nocompatible
-set nonumber relativenumber
-" allow plugins by file type (required for plugins!)
-filetype plugin on
-filetype indent on
+filetype plugin indent on " enable file type detection
+set autoindent
 
-" tabs and spaces handling
+"---------------------
+" Basic editing config
+"---------------------
+set shortmess+=I " disable startup message
+set nu " number lines
+set rnu " relative line numbering
+set incsearch " incremental search (as string is being typed)
+set hls " highlight search
+set listchars=tab:>>,nbsp:~ " set list to see tabs and non-breakable spaces
+set lbr " line break
+set scrolloff=5 " show lines above and below cursor (when possible)
+set noshowmode " hide mode
+set laststatus=2
+set backspace=indent,eol,start " allow backspacing over everything
+set timeout timeoutlen=1000 ttimeoutlen=100 " fix slow O inserts
+set lazyredraw " skip redrawing screen in some cases
+set autochdir " automatically set current directory to directory of last opened file
+set hidden " allow auto-hiding of edited buffers
+set history=8192 " more history
+set nojoinspaces " suppress inserting two spaces between sentences
+" use 4 spaces instead of tabs during formatting
 set expandtab
 set tabstop=4
-set softtabstop=4
 set shiftwidth=4
-
-" tab length exceptions on some file types
-autocmd FileType html setlocal shiftwidth=4 tabstop=4 softtabstop=4
-autocmd FileType htmldjango setlocal shiftwidth=4 tabstop=4 softtabstop=4
-autocmd FileType javascript setlocal shiftwidth=4 tabstop=4 softtabstop=4
-
-" always show status bar
-set ls=2
-
-" incremental search
-set incsearch
-" highlighted search results
-set hlsearch
-
-" syntax highlight on
-syntax on
-
-" show line numbers
-set nu
-set cursorline
-
-" navigate windows with meta+arrows
-map <M-Right> <c-w>l
-map <M-Left> <c-w>h
-map <M-Up> <c-w>k
-map <M-Down> <c-w>j
-imap <M-Right> <ESC><c-w>l
-imap <M-Left> <ESC><c-w>h
-imap <M-Up> <ESC><c-w>k
-imap <M-Down> <ESC><c-w>j
-
-" NERDTree Mapping ctrl-n
-map <C-n> :NERDTreeToggle<CR>
-
-" Comment this line to enable autocompletion preview window
-" (displays documentation related to the selected completion option)
-" Disabled by default because preview makes the window flicker
-set completeopt-=preview
-
-" save as sudo
-ca w!! w !sudo tee "%"
-
-
-" when scrolling, keep cursor 3 lines away from screen border
-set scrolloff=3
-
-
-" better backup, swap and undos storage
-set directory=~/.vim/dirs/tmp     " directory to place swap files in
-set backup                        " make backup files
-set backupdir=~/.vim/dirs/backups " where to put backup files
-set undofile                      " persistent undos - undo after you re-open the file
-set undodir=~/.vim/dirs/undos
-set viminfo+=n~/.vim/dirs/viminfo
-" store yankring history file there too
-let g:yankring_history_dir = '~/.vim/dirs/'
-
-" create needed directories if they don't exist
-if !isdirectory(&backupdir)
-    call mkdir(&backupdir, "p")
-endif
-if !isdirectory(&directory)
-    call mkdir(&directory, "p")
-endif
-if !isdirectory(&undodir)
-    call mkdir(&undodir, "p")
+set softtabstop=4
+" smart case-sensitive search
+set ignorecase
+set smartcase
+" tab completion for files/bufferss
+set wildmode=longest,list
+set wildmenu
+set mouse+=a " enable mouse mode (scrolling, selection, etc)
+if &term =~ '^screen'
+    " tmux knows the extended mouse mode
+    set ttymouse=xterm2
 endif
 
+"--------------------
+" Misc configurations
+"--------------------
+"
+" Change <Leader> to `
+let mapleader = "§"
 
-" ============================================================================
-" Plugins settings and mappings
-" Edit them as you wish.
+" unbind keys
+map <C-a> <Nop>
+map <C-x> <Nop>
+nmap Q <Nop>
 
-" Syntastic ------------------------------
+" disable audible bell
+set noerrorbells visualbell t_vb=
 
-" show list of errors and warnings on the current file
-nmap <leader>e :Errors<CR>
-" check also when just opened the file
-let g:syntastic_check_on_open = 1
-" don't put icons on the sign column (it hides the vcs status icons of signify)
-let g:syntastic_enable_signs = 1
-" custom icons (enable them if you use a patched font, and enable the previous 
-" setting)
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
-let g:syntastic_style_error_symbol = '✗'
-let g:syntastic_style_warning_symbol = '⚠'
+" open new split panes to right and bottom, which feels more natural
+set splitbelow
+set splitright
 
-" Jedi-vim ------------------------------
+" quicker window movement
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
 
-" All these mappings work only for python code:
-" Go to definition
-let g:jedi#auto_initialization = 0
-let g:jedi#goto_command = ',d'
-" Find ocurrences
-let g:jedi#usages_command = ',o'
-" Find assignments
-let g:jedi#goto_assignments_command = ',a'
-let g:jedi#show_call_signatures = "0"
-let g:jedi#popup_on_dot = 0
-let g:jedi#popup_select_first = 0
-" Go to definition in new tab
-nmap ,D :tab split<CR>:call jedi#goto()<CR>
-
-" NeoComplCache ------------------------------
-
-" most of them not documented because I'm not sure how they work
-" (docs aren't good, had to do a lot of trial and error to make 
-" it play nice)
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_ignore_case = 1
-let g:neocomplcache_enable_smart_case = 1
-let g:neocomplcache_enable_auto_select = 1
-let g:neocomplcache_enable_fuzzy_completion = 1
-let g:neocomplcache_enable_camel_case_completion = 1
-let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_fuzzy_completion_start_length = 1
-let g:neocomplcache_auto_completion_start_length = 1
-let g:neocomplcache_manual_completion_start_length = 1
-let g:neocomplcache_min_keyword_length = 1
-let g:neocomplcache_min_syntax_length = 1
-" complete with workds from any opened file
-let g:neocomplcache_same_filetype_lists = {}
-let g:neocomplcache_same_filetype_lists._ = '_'
-
-" UltiSnips ---------------------------
-
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-
-" Airline ------------------------------
-
-let g:airline_powerline_fonts = 0
-let g:airline_theme = 'bubblegum'
-let g:airline#extensions#whitespace#enabled = 0
-
-" to use fancy symbols for airline, uncomment the following lines and use a
-" patched font (more info on the README.rst)
-set guifont=Meslo\ LG\ M\ Regular\ for\ Powerline
-" if !exists('g:airline_symbols')
-"    let g:airline_symbols = {}
-" endif
-" let g:airline_left_sep = '⮀'
-" let g:airline_left_alt_sep = '⮁'
-" let g:airline_right_sep = '⮂'
-" let g:airline_right_alt_sep = '⮃'
-" let g:airline_symbols.branch = '⭠'
-" let g:airline_symbols.readonly = '⭤'
-" let g:airline_symbols.linenr = '⭡'
-
-let g:airline#extensions#tmuxline#enabled = 1
-
-" Tmuxline Stuff
-let g:tmuxline_powerline_separators = 0
-let g:tmuxline_separators = {
-  \ 'left' : '',
-  \ 'left_alt': '>',
-  \ 'right' : '',
-  \ 'right_alt' : '<',
-  \ 'space' : ' ', 
-  \ }
-
-silent! call repeat#set("\<Plug>vim-surround", v:count)
-
-let g:tex_flavor='latex'
-
-function! WC()
-    let filename = expand("%")
-    let cmd = "detex " . filename . " | wc -w | tr -d [:space:]"
-    let result = system(cmd)
-    echo result . " words"
+" movement relative to display lines
+nnoremap <silent> <Leader>d :call ToggleMovementByDisplayLines()<CR>
+function SetMovementByDisplayLines()
+    noremap <buffer> <silent> <expr> k v:count ? 'k' : 'gk'
+    noremap <buffer> <silent> <expr> j v:count ? 'j' : 'gj'
+    noremap <buffer> <silent> 0 g0
+    noremap <buffer> <silent> $ g$
+endfunction
+function ToggleMovementByDisplayLines()
+    if !exists('b:movement_by_display_lines')
+        let b:movement_by_display_lines = 0
+    endif
+    if b:movement_by_display_lines
+        let b:movement_by_display_lines = 0
+        silent! nunmap <buffer> k
+        silent! nunmap <buffer> j
+        silent! nunmap <buffer> 0
+        silent! nunmap <buffer> $
+    else
+        let b:movement_by_display_lines = 1
+        call SetMovementByDisplayLines()
+    endif
 endfunction
 
-command WC call WC()
+" toggle relative numbering
+nnoremap <C-n> :set rnu!<CR>
+
+" save read-only files
+command -nargs=0 Sudow w !sudo tee % >/dev/null
+
+"---------------------
+" Plugin configuration
+"---------------------
+
+" nerdtree
+nnoremap <Leader>n :NERDTreeToggle<CR>
+nnoremap <Leader>f :NERDTreeFind<CR>
+
+" buffergator
+let g:buffergator_suppress_keymaps = 1
+nnoremap <Leader>b :BuffergatorToggle<CR>
+
+" tagbar
+nnoremap <Leader>t :TagbarToggle<CR>
+
+" gundo
+nnoremap <Leader>u :GundoToggle<CR>
+if has('python3')
+    let g:gundo_prefer_python3 = 1
+endif
+
+" ctrlp
+nnoremap ; :CtrlPBuffer<CR>
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_show_hidden = 1
+
+" syntastic
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_mode_map = {
+    \ 'mode': 'passive',
+    \ 'active_filetypes': [],
+    \ 'passive_filetypes': []
+\}
+nnoremap <Leader>s :SyntasticCheck<CR>
+nnoremap <Leader>r :SyntasticReset<CR>
+nnoremap <Leader>i :SyntasticInfo<CR>
+nnoremap <Leader>m :SyntasticToggleMode<CR>
+
+" easymotion
+map <Space> <Plug>(easymotion-prefix)
+
+" incsearch
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
+" incsearch-easymotion
+map z/ <Plug>(incsearch-easymotion-/)
+map z? <Plug>(incsearch-easymotion-?)
+map zg/ <Plug>(incsearch-easymotion-stay)
+
+" argwrap
+nnoremap <Leader>w :ArgWrap<CR>
+
+noremap <Leader>x :OverCommandLine<CR>
+
+" markdown
+let g:markdown_fenced_languages = [
+    \ 'bash=sh',
+    \ 'c',
+    \ 'coffee',
+    \ 'erb=eruby',
+    \ 'javascript',
+    \ 'json',
+    \ 'perl',
+    \ 'python',
+    \ 'ruby',
+    \ 'yaml',
+    \ 'go',
+\]
+let g:markdown_syntax_conceal = 0
+
+" fugitive
+set tags^=.git/tags;~
+
+"---------------------
+" Local customizations
+"---------------------
+
+" local customizations in ~/.vimrc_local
+let $LOCALFILE=expand("~/.vimrc_local")
+if filereadable($LOCALFILE)
+    source $LOCALFILE
+endif

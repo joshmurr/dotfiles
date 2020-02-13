@@ -1,0 +1,13 @@
+#CARS#
+Ford-Mondeo, 24, 4, 5, FMON1000
+Citroen-C5, 34, 3, 4, CC5XN12
+
+#VANS#
+make-model, mpg, num-passengers, vin
+Ford-Transit, 18, 2, TRANS13
+Volkswagen-T5, 22, 2, VWT5
+
+#TRUCKS#
+mpg, length, num-rooms, vin
+19, 4.2, 1, TT1234
+8.5, 4.65, 2, TFN2987

@@ -1,0 +1,37 @@
+# LOG_01
+## 03-11-19
+
+This is coming one week after the proposal presentations given in class, and two weeks of thinking about the project.
+
+The project has already gone through a couple of iterations and some problems are beginning to be solved, but there is still plenty to consider and figure out.
+
+Early concepts essentially existed as follows:
+
+![Early concept](https://live.staticflickr.com/65535/49007759751_9bce81c985_c.jpg)
+![Early concept](https://live.staticflickr.com/65535/49007229418_10f68f982b_c.jpg)
+
+This developed into a prototyping model with which I could start to experiment with some of the features I have in mind:
+
+![Prototyping Model](https://live.staticflickr.com/65535/49007229393_b562b48ccb_c.jpg)
+![Prototyping V1](https://live.staticflickr.com/65535/49007285028_10c2ca7a75_c.jpg)
+
+## Bluetooth
+
+The first feature I decided to tackle was one which I thought which was quite pivotal to the whole project. I really want the headset to be wireless, so establishing some sort of wireless connection to the computer is necessary. It also didn't feel like it was be as easy as it can often seem in online tutorials, and I was right. It was and still is a pain in the bum, but I'm making progress.
+
+Here is my first connection made using a very simple C++ program which opens the bluetooth file as a stream, and then can send data to the arduino serial via bluetooth (code can be seen [here](/main/bluetooth/bluetooth.cpp)):
+
+[![First Bluetooth](https://img.youtube.com/vi/vuIJRwqIu1k/0.jpg)](https://www.youtube.com/watch?v=vuIJRwqIu1k)
+
+And then applied to the headset (at the end of the video it stops working):
+
+[![Bluetooth on head](https://img.youtube.com/vi/xcy5dCXxPbk/0.jpg)](https://www.youtube.com/watch?v=xcy5dCXxPbk)
+
+This option proved to be a dead end however as I could not find a way of using the same method to reliable send AND receive data on both ends, via the same port. After much messing around, I have eventually found a way by repurposing an example written in C to send data OR receive data from an Arduino. I re-wrote parts of this in C++ to be able to send AND THEN receive data in the same loop. This was the breakthrough I've been waiting for.
+
+In the video below, the Arduino has a simple counter (i++) which prints to Serial. It also checks the contents of it's own serial buffer (Serial.available()) every frame and depending on the contents, it turns the red, green or blue LEDs on or off. The C++ programm follows a similar protocol of entering an endless loop, in which it checks it's own buffer for data. The data it is receiving is simply the counter (i++), and if i%10==0 then toggle RED, if i%13==0 toggle GREEN etc. It sends this toggle command back to the Arduino which dutifully follows it's commands. Of course it sounds a lot simpler now that I've done it, but it felt like it took me many many attempts to get this working but now that it is, I know that I can send data to the computer for more interesting processing, and then send commands back to the Arduino.
+
+[![C++ Bluetooth IO](https://img.youtube.com/vi/omVK_Mh5MIA/0.jpg)](https://www.youtube.com/watch?v=omVK_Mh5MIA)
+
+[Code for the Arduino can be found here](/Arduino/serial_2way_test/serial_2way_test.ino)
+[C++ code can be found here](/main/WORKING_IO_STREAM/arduino-serial.cpp)

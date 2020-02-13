@@ -1,0 +1,23 @@
+#ifndef _PARAMS
+#define _PARAMS
+
+#include "ofMain.h"
+
+class Params {
+    public:
+        void setup();
+        ofPoint eCenter;
+        float eRad;
+        float velRad;
+        float lifetime;
+
+        float rotate;
+
+        float force;
+        float spinning;
+        float friction;
+};
+
+extern Params param;
+
+#endif

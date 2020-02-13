@@ -1,0 +1,27 @@
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+#define TWO_PI 6.28318530718
+
+uniform vec2 u_resolution;
+uniform float u_time;
+
+void main(){
+    vec2 st = gl_FragCoord.xy/u_resolution.xy;
+    vec3 color = vec3(0.0);
+
+    float thickness = 0.001;
+    thickness += 1.0 - abs(cos(u_time * 2.0));
+    float size = 0.1;
+
+    vec2 bl = 1.0 - step(vec2(size - thickness), st) + step(vec2(size), st);
+    float pct = bl.x * bl.y;
+
+    vec2 tr = 1.0 - step(vec2(size - thickness), 1.0-st) + step(vec2(size), 1.0-st);
+    pct *= tr.x * tr.y;
+
+    color = vec3(pct);
+
+    gl_FragColor = vec4(color, 1.0);
+}

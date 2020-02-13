@@ -1,0 +1,21 @@
+#ifndef _PATH
+#define _PATH
+
+#include "ofMain.h"
+
+class Path {
+    public:
+        void setup(int rad);
+        void addPoint(floatx, float y);
+        void draw();
+
+        ofPolyline thickLine;
+        ofPolyline thinLine;
+        vector<ofVec2f> points;
+        int radius;
+
+        Path();
+
+    private:
+};
+#endif

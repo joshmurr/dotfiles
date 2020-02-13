@@ -1,0 +1,12 @@
+valid = False
+
+while not valid:
+    try:
+        month = int(input('Enter current month (1-12): '))
+
+        while month < 1 or month > 12:
+            print('Invalid input - must be in the range 1-12')
+            month = int(input('Enter current month (1-12): '))
+        valid = True
+    except ValueError:
+        print('Invalid Month Value')

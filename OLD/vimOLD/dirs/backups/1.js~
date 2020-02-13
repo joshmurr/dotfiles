@@ -1,0 +1,50 @@
+const playButton = document.getElementById('playButton');
+
+var maximJs = maximilian();
+var maxiAudio = new maximJs.maxiAudio();
+var kick = new maximJs.maxiSample();
+var snare = new maximJs.maxiSample();
+var myClock = new maximJs.maxiClock();
+
+myClock.setTempo(180);
+myClock.setTicksPerBeat(4);
+
+
+var beatSlice = 0;
+
+// you can add files into the document by going to Settings (gear icon) > Files
+// uncomment this and change the file name to your sample
+maxiAudio.loadSample('samples/trance_kick.wav', kick);
+maxiAudio.loadSample('samples/snare.wav', snare);
+//	 maxiAudio.loadSample('BD1.wav', sample);
+
+let playAudio = () => {
+    playButton.style.display="none";
+
+    maxiAudio.init();
+    maxiAudio.play = function() {
+        myClock.ticker(); 
+
+        // the .tick method is a boolean belonging to the maxiClock object that is either true or false.
+
+        // the .playHead method keeps a running count of the number of beats
+        // We're using modulo (%) to turn the playHead count in to a beat division
+        // e.g. playHead%4 counts 0,1,2,3,0,1,2,3.
+        // The if statement checks to see if there's a tick. If there is one, and 
+        // the playHead%4 is equal to 0, we trigger a kick drum.   
+
+        if(myClock.tick && myClock.playHead%4===0){
+            kick.trigger();
+        }
+
+        if( myClock.tick && myClock.playHead%8===0){
+            snare.trigger();
+        }
+
+        var out = (kick.playOnce()+ snare.playOnce() ) ;
+        //return the output to the speakers.  
+        return out * 0.0;
+    }
+
+}
+playButton.addEventListener("click", () => playAudio());

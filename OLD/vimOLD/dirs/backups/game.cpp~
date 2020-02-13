@@ -1,0 +1,101 @@
+/*
+ * game.cpp
+ *
+ *  Created on: 23 Jul 2019
+ *      Author: joshmurr
+ */
+
+#include "game.h"
+#include <iostream>
+#include <vector>
+
+using std::vector;
+using std::cout;
+using std::endl;
+
+Game::Game(const int cs, const int w, const int h) : lastTime(0) {
+    width = w;
+    height = h;
+    cell_size = cs;
+    cols = width/cell_size;
+    rows = height/cell_size;
+    total_cells = cols * rows;
+    
+    // Initialize cells with random state (1 or 0)
+    m_cells.reserve(total_cells); // Reserves memory before push_back's
+    for (int x = 0; x < cols; x++) {
+        for (int y = 0; y < rows; y++) {
+            Cell cell = Cell(x*cell_size, y*cell_size, cell_size, cell_size, (2.0*rand())/RAND_MAX);
+            m_cells.push_back(cell);
+            //m_cells_buffer.push_back(cell);
+            
+        }
+    }
+    cout << m_cells.size() << endl;
+
+    //Set pointer equal to main vector
+    m_cells_prev = &m_cells;
+
+}
+
+Game::~Game() {
+    m_cells.clear();
+    //m_cells_buffer.clear();
+}
+
+void Game::print_cell(int i){
+    cout << "m_cells[" << i << "].color: " << m_cells[i].color << endl;
+}
+
+
+
+void Game::update() {
+    for (int x = 0; x < cols; x++) {
+        for (int y = 0; y < rows; y++) {
+            // State of curent cell
+            int cell_loc = y * cols + x;
+            Cell *current_cell = &m_cells[cell_loc]; 
+            int current_state = current_cell->color;
+            //cout << "current_state: " << current_state << endl;
+            int sum = 0;
+            for (int x_local = -1; x_local < 2; ++x_local) {
+                for (int y_local = -1; y_local < 2; ++y_local) {
+                    // Cell to check
+                    int currentX = x + x_local;
+                    int currentY = y + y_local;
+                    // Edge checking (Wrapping)
+                    if (currentX < 0) {
+                        currentX = cols;
+                    }
+                    if (currentX > cols) {
+                        currentX = 0;
+                    }
+                    if (currentY < 0) {
+                        currentY = rows;
+                    }
+                    if (currentY > rows) {
+                        currentY = 0;
+                    }
+                    //if (currentX >= 0 && currentX < width && currentY >= 0 && currentY < height) {
+                    sum += m_cells[currentY * cols + currentX].color;
+                }
+            }
+            sum -= current_state;
+            if (current_state == 0 && sum == 3) {
+                m_cells_prev->at(cell_loc).color = 1;
+            } else if (current_state == 1 && (sum < 2 || sum > 3)) {
+                m_cells_prev->at(cell_loc).color = 0;
+            } else {
+                m_cells_prev->at(cell_loc).color = m_cells[cell_loc].color;
+            }
+        }
+    }
+
+    temp = m_cells_prev;
+    m_cells_prev = &m_cells;
+    m_cells = *temp;
+
+        
+    //m_cells = m_cells_buffer;
+}
+

@@ -1,0 +1,63 @@
+const playButton = document.getElementById('playButton');
+const controls = document.getElementById('controls');
+const freqButton = document.getElementById('freqButton');
+const ampButton = document.getElementById('ampButton');
+const addOsc = document.getElementById('addOscButton');
+//create a maximilian object
+var maxi = maximilian();
+
+//create an audio engine
+var maxiEngine = new maxi.maxiAudio();
+var oscilloscope,spectrogram;
+
+var user_freq = 100;
+var user_amp = 1;
+var oscillator  = new maxi.maxiOsc();
+
+//when the play button is pressed...
+let playAudio = () => {
+    //arrange play button
+    playButton.style.display="none";
+    controls.style.display="block";
+
+    //start the audio engine
+    maxiEngine.init();
+
+    //show an oscilloscope and freqscope
+    Nexus.context = maxiEngine.context;
+    oscilloscope = new Nexus.Oscilloscope('oscilloscope', {'size': [900,200]}).connect(maxiEngine.maxiAudioProcessor);
+    spectrogram = new Nexus.Spectrogram('spectrogram', {'size': [900,200]}).connect(maxiEngine.maxiAudioProcessor);
+
+    // Get Frequency from box
+    var freq = new Nexus.Number('#freqControl',{
+        'size': [60, 30],
+        'value': 100,
+        'min': 0,
+        'max': 22000,
+        'step': 1
+    })
+    freq.on('change', function(v) {
+        user_freq = v;
+    })
+
+    // Get Amp from box
+    var amp = new Nexus.Number('#ampControl',{
+        'size': [60, 30],
+        'value': 1,
+        'min': 0,
+        'max': 10,
+        'step': 0.1
+    })
+    amp.on('change', function(v) {
+        user_amp = v;
+    })
+
+
+    maxiEngine.play = function() {
+        return abs(oscillator.sinewave(user_freq) * user_amp); 
+    }
+}
+
+playButton.addEventListener("click", () => playAudio());
+//randButton.addEventListener("click", ()=> randomise());
+//window.addEventListener("load", () => playAudio());

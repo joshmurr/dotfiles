@@ -1,0 +1,3 @@
+results = {"thing":"it's thing", "other thing":"two"}
+
+print(f"Results : {results}")

@@ -1,0 +1,100 @@
+" Signify ------------------------------" this first setting decides in which order try to guess your current vcs" UPDATE it to reflect your preferences, it will speed up opening fileslet g:signify_vcs_list = [ 'git', 'hg' ]" mappings to jump to changed blocksnmap <leader>sn <plug>(signify-next-hunk)nmap <leader>sp <plug>(signify-prev-hunk)" nicer colorshighlight DiffAdd           cterm=bold ctermbg=none ctermfg=119highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167highlight DiffChange        cterm=bold ctermbg=none ctermfg=227highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227" Window Chooser ------------------------------" mappingnmap  -  <Plug>(choosewin)" show big letterslet g:choosewin_overlay_enable = 1,V
+" DragVisuals ------------------------------" mappings to move blocks in 4 directionsvmap <expr> <S-M-LEFT> DVB_Drag('left')vmap <expr> <S-M-RIGHT> DVB_Drag('right')vmap <expr> <S-M-DOWN> DVB_Drag('down')vmap <expr> <S-M-UP> DVB_Drag('up')" mapping to duplicate blockvmap <expr> D DVB_Duplicate(),V
+" Autoclose ------------------------------" Fix to let ESC work as espected with Autoclose pluginlet g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"},V
+" TabMan ------------------------------" mappings to toggle display, and to focus on itlet g:tabman_toggle = 'tl'let g:tabman_focus  = 'tf',V
+" TabMan ------------------------------" mappings to toggle display, and to focus on itlet g:tabman_toggle = 'tl'let g:tabman_focus  = 'tf'" Autoclose ------------------------------,V
+",v
+" Tagbar ----------------------------- " file finder mappinglet g:ctrlp_map = ',e'" tags (symbols) in current file finder mappingnmap ,g :CtrlPBufTag<CR>" tags (symbols) in all files finder mappingnmap ,G :CtrlPBufTagAll<CR>" general code finder in all files mappingnmap ,f :CtrlPLine<CR>" recent files finder mappingnmap ,m :CtrlPMRUFiles<CR>" commands finder mappingnmap ,c :CtrlPCmdPalette<CR>" to be able to call CtrlP with default search textfunction! CtrlPWithSearchText(search_text, ctrlp_command_end)    execute ':CtrlP' . a:ctrlp_command_end    call feedkeys(a:search_text)endfunction" same as previous mappings, but calling with current word as default textnmap ,wg :call CtrlPWithSearchText(expand('<cword>'), 'BufTag')<CR>nmap ,wG :call CtrlPWithSearchText(expand('<cword>'), 'BufTagAll')<CR>nmap ,wf :call CtrlPWithSearchText(expand('<cword>'), 'Line')<CR>nmap ,we :call CtrlPWithSearchText(expand('<cword>'), '')<CR>nmap ,pe :call CtrlPWithSearchText(expand('<cfile>'), '')<CR>nmap ,wm :call CtrlPWithSearchText(expand('<cword>'), 'MRUFiles')<CR>nmap ,wc :call CtrlPWithSearchText(expand('<cword>'), 'CmdPalette')<CR>" don't change working directorylet g:ctrlp_working_path_mode = 0" ignore these files and folders on file finderlet g:ctrlp_custom_ignore = {  \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',  \ 'file': '\.pyc$\|\.pyo$',  \ },V
+" show pending tasks listmap <F2> :TaskList<CR>" CtrlP ------------------------------,V
+" Tasklist ------------------------------,V
+" NERDTree ----------------------------- " toggle nerdtree displaymap <F3> :NERDTreeToggle<CR>" open nerdtree with the current file selectednmap ,t :NERDTreeFind<CR>" don;t show these file typeslet NERDTreeIgnore = ['\.pyc$', '\.pyo$'],V
+" toggle tagbar displaymap <F4> :TagbarToggle<CR>" autofocus on tagbar openlet g:tagbar_autofocus = 1,V
+" j,V
+" autocompletion of files and commands behaves like shell" (complete only the common part, list the options that match)set wildmode=list:longest,V
+" colors for gvimif has('gui_running')    colorscheme wombatendif,V
+,V
+" let g:molokai_original = 1,V
+" simple recursive grepnmap ,r :Ack nmap ,wr :Ack <cword><CR>,V
+imap <C-J> <C-X><C-O>,V
+" old autocomplete keyboard shortcut,V
+" tab navigation mappingsmap tn :tabn<CR>map tp :tabp<CR>map tm :tabm map tt :tabnew map ts :tab split<CR>map <C-S-Right> :tabn<CR>imap <C-S-Right> <ESC>:tabn<CR>map <C-S-Left> :tabp<CR>imap <C-S-Left> <ESC>:tabp<CR>,V
+Plug 'vim-scripts/YankRing.vim',V
+" Yank history navigation,V
+Plug 'vim-scripts/Wombat',V
+" Gvim colorscheme,V
+Plug 'vim-scripts/matchit.zip',V
+" XML/HTML tags navigation,V
+Plug 'vim-scripts/IndexedSearch',V
+" Search results counter,V
+Plug 'mileszs/ack.vim',V
+" Ack code search (requires ack installed in the system),V
+Plug 't9md/vim-choosewin',V
+" Window chooser,V
+Plug 'fisadev/dragvisuals.vim',V
+" Drag visual blocks arround,V
+Plug 'fisadev/vim-isort',V
+" Automatically sort python imports,V
+Plug 'mhinz/vim-signify',V
+" Git/mercurial/others diff icons on the side of the file lines,V
+Plug 'garbas/vim-snipmate',V
+Plug 'honza/vim-snippets',V
+Plug 'tomtom/tlib_vim',V
+Plug 'MarcWeber/vim-addon-mw-utils',V
+" Snippets manager (SnipMate), dependencies, and snippets repo,V
+Plug 'Shougo/neocomplcache.vim',V
+" Better autocompletion,V
+Plug 'ervandew/supertab',V
+" SuperTab,V
+"Plug 'davidhalter/jedi-vim',V
+" Python autocompletion, go to definition.,V
+Plug 'jeetsukumaran/vim-indentwise',V
+" Indentation based movements,V
+Plug 'michaeljsmith/vim-indent-object',V
+" Indent text object,V
+Plug 'Townk/vim-autoclose',V
+" Autoclose,V
+Plug 'tpope/vim-surround',V
+" Surround,V
+"Plug 'fisadev/FixedTaskList.vim',V
+" Pending tasks list,V
+"Plug 'rosenfeld/conque-term',V
+" Consoles as buffers,V
+Plug 'kien/tabman.vim',V
+" Tab list panel,V
+Plug 'motemen/git-vim',V
+" Git integration,V
+Plug 'mattn/emmet-vim',V
+" Zen coding,V
+Plug 'fisadev/vim-ctrlp-cmdpalette',V
+" Extension to ctrlp, for fuzzy command finder,V
+Plug 'ctrlpvim/ctrlp.vim',V
+" Code and files fuzzy finder,V
+Plug 'majutsushi/tagbar',V
+" Class/module browser,V
+Plug 'scrooloose/nerdtree',V
+" Better file browser,V
+Plug 'arielrossanigo/dir-configs-override.vim',V
+" Override configs by directory ,V
+" Plug 'google/yapf', { 'rtp': 'plugins/vim', 'for': 'python' },V
+" Plug 'sbdchd/neoformat',V
+Plug 'mindriot101/vim-yapf',V
+e,v
+ervandew/supertab,v
+# mainimport stackmystack = stack.getStack()for item in range(1, 5):    stack.push(mystack, item)    print('Pushing', item, 'on stack')while not stack.isEmpty(mystack):    item = stack.pop(mystack)    print('Popping', item, 'from stack'),V
+# mainimport stackmystack = stack.getStack()for item in range(1, 5):    stack.push(mystack, item)    print('Pushing', item, 'on stack')while not stack.isEmpty(mystack):    item = stack.pop(mystack)    print('Popping', item, 'from stack'),v
+# mainimport stackmystack = stack.getStack()for item in range(1, 5):    stack.push(mystack, item)    print('Pushing', item, 'on stack')while not stack.isEmpty(mystack):    item = stack.pop(mystack)    print('Popping', item, 'from stack'),V
+ ,v
+5,v
+',v
+RAL 7035 Light grey,v
+ + 1 + ,v
++,v
+1,v
+https://media3.giphy.com/media/2teLgVuJAxtks/giphy.gif,v
+),v
+k,v
+(,v
+r,v
+t,v
+s,v
+# hide default turtle and keep from drawingthe_turtle.hideturtle()the_turtle.penup(),V

@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/Users/joshmurr/Documents/Website/new'
+let g:netrw_dirhist_2='/Users/joshmurr/Documents/Website'
+let g:netrw_dirhist_3='/Users/joshmurr/Documents'
+let g:netrw_dirhist_4='/Users/joshmurr'
+let g:netrw_dirhist_5='/Users/joshmurr/Documents'
+let g:netrw_dirhist_6='/Users/joshmurr/Documents/Website'
+let g:netrw_dirhist_7='/Users/joshmurr/.vim'

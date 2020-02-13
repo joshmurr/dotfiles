@@ -1,0 +1,146 @@
+function line_sphere_red(){
+    let fov = 400;
+
+    let line_sphere_canvas = document.getElementById("line_sphere_red");
+    let line_sphere_canvas_width = 800;
+    let line_sphere_canvas_height = 600;
+    let context = line_sphere_canvas.getContext("2d");
+    line_sphere_canvas.setAttribute("width",line_sphere_canvas_width);
+    line_sphere_canvas.setAttribute("height",line_sphere_canvas_height);
+
+    let point = [];
+    let points = [];
+    let point3d = [];
+    let angleX = 0;
+    let angleY = 0;
+    let HALF_WIDTH =line_sphere_canvas_width / 2;
+    let HALF_HEIGHT =line_sphere_canvas_height / 2;
+
+    let x3d = 0;
+    let y3d = 0;
+    let z3d = 0;
+
+    let lastScale = 0;
+    let lastx2d = 0;
+    let lasty2d = 0;
+    let dim = 15; // This is the number of rings
+    let spacing = ((Math.PI * 2) / dim*2);
+    let numPoints = dim * dim;
+    let size = 200;
+    let ticks = 0;
+
+    // MAKE POINTS
+    for (let i = 0; i < dim ; i++) {
+        let z = size * Math.cos(spacing / 2 * i);
+        let s = size * Math.sin(spacing / 2 * i);
+        for (let j = 0; j < dim; j++ ) {
+            let point = [Math.cos(spacing * j) * s,Math.sin(spacing * j) * s,z];
+            points.push(point);
+
+        }
+    }
+
+    function draw() {
+        context.fillStyle = "rgb(0,0,0)";
+        context.fillRect(0, 0,line_sphere_canvas_width,line_sphere_canvas_height);
+
+        let prevPoint = [];
+        let prevScale;
+
+        for (let i = 0; i < dim ; i++) {
+            // For each RING
+            let firstPoint = [];
+            let firstScale;
+            let color = Math.floor((255/dim)*i);
+            context.strokeStyle = "rgb("+color+","+(255-color)+","+(color)+")";
+            context.beginPath();
+            for (let j = 0; j < dim; j++ ) {
+                // For each SEGMENT
+                point3d = points[j+dim*i];
+                z3d = point3d[2];
+                //z3d -= 1;
+                if (z3d < -fov) z3d += 10;
+                point3d[2] = z3d;
+
+                rotateX(point3d,-0.01);
+                rotateY(point3d,0.01);
+
+                x3d = point3d[0];
+                y3d = point3d[1];
+                z3d = point3d[2];
+
+                let scale = (fov / (fov + z3d));
+
+                let x2d = (x3d * scale) + HALF_WIDTH;
+                let y2d = (y3d * scale) + HALF_HEIGHT;
+
+                if(!j) {
+                    firstPoint = [x2d, y2d]; // Save first point
+                    firstScale = scale;
+                }
+
+                context.lineWidth = scale*4;
+                context.lineTo(x2d + scale, y2d);
+            }
+            context.lineTo(firstPoint[0] + firstScale, firstPoint[1]);
+            context.stroke();
+        }
+
+        /*for (let i = 0; i < dim ; i++) {
+
+          for (let j = 0; j < dim; j++ ) {
+            let point = points[i+j*dim];
+            point[0] += Math.cos(ticks/4)*10;
+            point[1] += Math.sin(ticks/4)*10;
+            point[2] += Math.cos(ticks/4)*10;
+
+          }
+        }
+
+        ticks++;
+        */
+
+        requestAnimationFrame(draw);
+    }
+
+    requestAnimationFrame(draw);
+
+
+    function rotateX(point3d,angleX) {
+        let	x = point3d[0]; 
+        let	z = point3d[2]; 
+
+        let	cosRY = Math.cos(angleX);
+        let	sinRY = Math.sin(angleX);
+
+        let	tempz = z; 
+        let	tempx = x;
+
+        x= (tempx*cosRY)+(tempz*sinRY);
+        z= (tempx*-sinRY)+(tempz*cosRY);
+
+        point3d[0] = x;
+        point3d[2] = z;
+
+    }
+
+    function rotateY(point3d,angleY) {
+        let y = point3d[1];
+        let	z = point3d[2]; 
+
+        let cosRX = Math.cos(angleY);
+        let sinRX = Math.sin(angleY);
+
+        let	tempz = z; 
+        let	tempy = y;
+
+        y= (tempy*cosRX)+(tempz*sinRX);
+        z= (tempy*-sinRX)+(tempz*cosRX);
+
+        point3d[1] = y;
+        point3d[2] = z;
+
+    }
+}
+line_sphere_red();
+

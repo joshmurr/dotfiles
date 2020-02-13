@@ -1,0 +1,19 @@
+#main {
+    margin-top:30px;
+}
+
+.jumbotron {
+    background-color: #ff9500c9;
+}
+
+.spacer{
+    height:100%;
+}
+
+main p{
+    background-color: #dadaff;
+}
+
+main h3 {
+    color: #ffdada;
+}

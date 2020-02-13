@@ -1,0 +1,45 @@
+# LOG 12
+## 16-01-20
+
+## Final Videos
+
+My filming and editing skills are not the best, but the video below demonstrates the features of the headset:
+
+- Boot up procedure
+- The lights in the eyes changing as the user looks at the sun.
+- The vibration motors triggering as the user moves near or through a wall (if you listen very closely).
+- Some of the command line features like turning on the origin axes for the headset, and viewing the data packet being sent to the Arduino.
+
+Demonstration Video:
+
+[![Demo](https://img.youtube.com/vi/bjc74J611LI/0.jpg)](https://www.youtube.com/watch?v=bjc74J611LI)
+
+Fusion 360 Assembly Video:
+
+[![Assembly](https://img.youtube.com/vi/mq4GcZgHLwg/0.jpg)](https://www.youtube.com/watch?v=mq4GcZgHLwg)
+
+## Final Write-up
+
+In all this has been the project I set out to do. I have pretty much acheived a working prototype of the initial idea I had, minus a few features, but a good starting point to build upon, or to go forward to a Version 2.
+
+Most importantly I learnt absolutely loads through the duration of the project. 
+
+- I feel more confident with C++ (but aware there is still A LOT more to learn).
+- I learnt a lot more about Arduino generally.
+- It was a good experience building a 3D engine from scratch, and I would like to do this again but with more features. I think this would stand me in good stead for OpenGL or other more complex 3D work in future.
+- Sending data packets back a forth was good to play with and I'm very happy that ended up being a pretty stable part of the project once implemented.
+- A lot of Fusion 360 and 3D printing.
+- Actually using bitwise mathematics was a good experience.
+- And a lot more.
+
+In all, the outcome of the project is perhaps a tiny bit underwhelming, but I feel a lot more equipped now to make a better version of this or something similar in future.
+
+Some nicer photographs:
+
+![Front](https://live.staticflickr.com/65535/49394971967_e78cd28df5_b.jpg)
+![Back](https://live.staticflickr.com/65535/49394971667_40da20f717_b.jpg)
+![Inside](https://live.staticflickr.com/65535/49394972832_a1cd019119_b.jpg)
+![Top Right](https://live.staticflickr.com/65535/49394771831_e7550d47eb_b.jpg)
+![Back Left](https://live.staticflickr.com/65535/49394297568_1fdb987e03_b.jpg)
+![LDR](https://live.staticflickr.com/65535/49394972627_4be2cf8019_b.jpg)
+![With laptop](https://live.staticflickr.com/65535/49394299908_fce4f21e9c_b.jpg)

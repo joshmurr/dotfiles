@@ -1,0 +1,200 @@
+@article{cyberspace,
+  author  = {John Perry Barlow},
+  title   = {A Declaration of the Independence of Cyberspace},
+  year    = {1996},
+  url     = {https://www.eff.org/cyberspace-independence}
+}
+
+@article{blackstack,
+  author  = {Benjamin H. Bratton},
+  title   = {The Black Stack},
+  journal = {e-Flux},
+  number  = {53},
+  year    = {2014},
+  url     = {https://www.e-flux.com/journal/53/59883/the-black-stack/}
+}
+
+@article{bernerslee,
+  author  = {Tim Berners Lee},
+  title   = {Tim Berners-Lee: I invented the web. Here are three things we need to change to save it},
+  journal = {The Guardian},
+  year    = {2017},
+  url     = {https://www.theguardian.com/technology/2017/mar/11/tim-berners-lee-web-inventor-save-internet},
+  urldate = {2019-11-30} 
+}
+
+@inbook{homodeus,
+    author = {Yuval Noah Harari},
+    title  = {Homo Deus},
+    year   = {2015},
+    publisher = {Vintage},
+    address = {London}
+}
+
+@book{thestack,
+    author = {Benjamin H. Bratton},
+    title  = {The Stack},
+    year   = {2015},
+    publisher = {Massachusetts Institute of Technology},
+    address = {The MIT Press, Cambridge, Massachusetts / London, England}
+}
+
+@inbook{thestackintro,
+    author = {Benjamin H. Bratton},
+    title  = {The Stack},
+    year   = {2015},
+    publisher = {Massachusetts Institute of Technology},
+    address = {The MIT Press, Cambridge, Massachusetts},
+    pages  = {7-8}
+}
+
+@inbook{thestackuser,
+    author = {Benjamin H. Bratton},
+    title  = {The Stack},
+    year   = {2015},
+    publisher = {Massachusetts Institute of Technology},
+    address = {The MIT Press, Cambridge, Massachusetts},
+    pages  = {251-253}
+}
+
+@inbook{neoliberalism,
+    author = {David Harvey},
+    title  = {A Breif History of Neoliberalism},
+    year   = {2005},
+    publisher = {Oxford University Press},
+    address = {Oxford},
+    pages  = {30-32}
+}
+
+@inbook{statewoods,
+    author = {James C. Scott: How Certain Schemes to Improve the Human Condition Have Failed},
+    title  = {Seeing Like A State},
+    year   = {1998},
+    publisher = {Yale University Press},
+    address = {New Haven and London},
+    pages  = {11-19}
+}
+
+@inbook{statebrasilia,
+    author = {James C. Scott: How Certain Schemes to Improve the Human Condition Have Failed},
+    title  = {Seeing Like A State},
+    year   = {1998},
+    publisher = {Yale University Press},
+    address = {New Haven and London},
+    pages  = {125-133}
+}
+
+@article{anatomyofai,
+  author  = {Kate Crawford, Vladan Joler},
+  title   = {Anatomy of an AI System: The Amazon Echo As An Anatomical Map of Human Labor, Data and Planetary Resources},
+  journal = {AI Now Institute and Share Lab},
+  year    = {2018},
+  url     = {https://anatomyof.ai/},
+  urldate = {2019-11-27} 
+}
+
+@article{facebooksoldiers,
+  author  = {Ewen MacAskill},
+  title   = {British army creates team of Facebook warriors},
+  journal = {The Guardian},
+  year    = {2015},
+  url     = {https://amp.theguardian.com/uk-news/2015/jan/31/british-army-facebook-warriors-77th-brigade},
+  urldate = {2019-11-30} 
+}
+@book{haraway,
+  year = {1991},
+  author = {Donna Haraway},
+  title = {"A Cyborg Manifesto: Science, Technology, and Socialist-Feminism in the Late Twentieth Century," in Simians, Cyborgs and Women: The Reinvention of Nature},
+  publisher = {Routledge}
+}
+@book{lentdescartes,
+  year = {2017},
+  author = {Jeremy Lent},
+  title = {The Patterning Instinct},
+  publisher = {Prometheus Books},
+  pages = {235-237}
+}
+
+@misc{amazonwiki, 
+  title={Amazon (company)}, 
+  url={https://en.wikipedia.org/wiki/Amazon_(company)}, 
+  journal={Wikipedia}, 
+  publisher={Wikimedia Foundation}, 
+  year={2019},
+  urldate = {2019-11-30} 
+}
+@article{amazoncnbc,
+  author  = {Eugene Kim},
+  title   = {Why Amazon is the winner of the Supreme Court sales tax ruling},
+  journal = {CNBC},
+  year    = {2018},
+  url     = {https://www.cnbc.com/2018/06/21/why-amazon-wins-with-supreme-court-sales-tax-ruling.html},
+  urldate = {2019-11-30} 
+}
+@article{facebookfreebasic,
+  author  = {Maeve Shearlaw},
+  title   = {Facebook lures Africa with free internet - but what is the hidden cost?},
+  journal = {The Guardian},
+  year    = {2016},
+  url     = {https://www.theguardian.com/world/2016/aug/01/facebook-free-basics-internet-africa-mark-zuckerberg},
+  urldate = {2019-11-24} 
+}
+
+@article{sharkattack,
+  author  = {Robert McMillan},
+  title   = {Sharks wage war on undersea internet cables},
+  journal = {Wired},
+  year    = {2014},
+  url     = {https://www.wired.co.uk/article/shark-cables},
+  urldate = {2019-11-24} 
+}
+
+@article{algeriashovel,
+  author  = {Tom Parfitt},
+  title   = {Georgian woman cuts off web access to whole of Armenia},
+  journal = {The Guardian},
+  year    = {2011},
+  url     = {https://www.theguardian.com/world/2011/apr/06/georgian-woman-cuts-web-access},
+  urldate = {2019-11-24} 
+}
+
+@article{google,
+  author  = {Stuart N. Brotman},
+  title   = {INSIGHT: The Google Antitrust Investigations—Learning From Germany’s Facebook Inquiry},
+  journal = {Bloomberg Law},
+  year    = {2019},
+  url     = {https://news.bloomberglaw.com/mergers-and-antitrust/insight-the-google-antitrust-investigations-learning-from-germanys-facebook-inquiry},
+  urldate = {2019-11-01} 
+}
+
+@misc{staltzdying,
+  author  = {André Staltz},
+  title   = {THE WEB BEGAN DYING IN 2014, HERE'S HOW},
+  year    = {2017},
+  url     = {https://staltz.com/the-web-began-dying-in-2014-heres-how.html},
+  urldate = {2019-11-30} 
+}
+
+@misc{staltzrescue,
+  author  = {André Staltz},
+  title   = {A PLAN TO RESCUE THE WEB FROM THE INTERNET},
+  year    = {2017},
+  url     = {https://staltz.com/a-plan-to-rescue-the-web-from-the-internet.html},
+  urldate = {2019-11-24} 
+}
+
+@misc{lanier,
+  author  = {Zachary Mack},
+  title   = {Jaron Lanier’s ideas for the future of profiting from your own data},
+  year    = {2019},
+  url     = {https://www.theverge.com/2019/4/9/18302076/data-monetization-control-manipulation-economy-jaron-laniers-virtual-reality-vr-vergecast},
+  urldate = {2019-11-30} 
+}
+
+@misc{truthonthemarket,
+  author  = {Alec Stapp},
+  title   = {Debunking Elizabeth Warren’s Claim That “More Than 70% of All Internet Traffic Goes through Google or Facebook”},
+  year    = {2019},
+  url     = {https://truthonthemarket.com/2019/09/27/debunking-elizabeth-warrens-claim-that-more-than-70-of-all-internet-traffic-goes-through-google-or-facebook/},
+  urldate = {2019-11-30} 
+}

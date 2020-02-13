@@ -1,0 +1,116 @@
+# LOG 07
+## 19-12-19
+
+## Understanding the MPU6050 Intertial Measurement Unit
+
+Addmittedly this is something I've been putting off. But time to tackle it... Fortunately there is a wealth of information online for this ubiquitous Inertial Measurement Unit (IMU) which should make my life easier. I'm writing this as I go along and firgure things out, so forgive me if it's a bit sporadic.
+
+My starting point is [Jeff Rowberg's I2C Development Library](https://github.com/jrowberg/i2cdevlib) for Arduino. Jeff Rowberg has written libraries and example programs for many I2C devices, and the IMU6050 is one of them. The [example sketch](https://github.com/jrowberg/i2cdevlib/blob/master/Arduino/MPU6050/examples/MPU6050_DMP6/MPU6050_DMP6.ino) for the IMU6050 is extremely well commented, and comes with a Processing sketch which you can use to test the setup. Getting it going is as easy and plugging into the correct pins and loading the program. The video below is me doing just that:
+
+[![IMU w/ Processing Sketch](https://img.youtube.com/vi/JgsG1NYsFuo/0.jpg)](https://www.youtube.com/watch?v=JgsG1NYsFuo)
+
+The Arduino code I will be referencing can be seen [here](https://github.com/joshmurr/cci_pcomp/blob/master/project/Arduino/MPU6050_DMP6_teapot/MPU6050_DMP6_teapot.ino), and the Processing sketch [here](https://github.com/joshmurr/cci_pcomp/blob/master/project/Processing/MPUTeapot/MPUTeapot.pde).
+
+For the Arduino code to work with the Processing sketch, you need to export (`Serial.print`) what is called `OUTPUT_TEAPOT`, which I assume is a reference to the canonical utah teapot:
+
+![Utah Teapot](https://metalbyexample.com/wp-content/uploads/figure-16.png)
+
+The data from the IMU appears to be stored in the `fifoBuffer` which gets parsed in different ways depending on the output being requested. For example if `OUTPUT_READABLE_YAWPITCHROLL` is selected then certain values from the `fifoBuffer` are parsed through a quaternion manipulation, a gravity manipulation and then a yaw-pitch-roll manipulation:
+
+```c
+#ifdef OUTPUT_READABLE_YAWPITCHROLL
+    // display Euler angles in degrees
+    mpu.dmpGetQuaternion(&q, fifoBuffer);
+    mpu.dmpGetGravity(&gravity, &q);
+    mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+    Serial.print("ypr\t");
+    Serial.print(ypr[0] * 180/M_PI);
+    Serial.print("\t");
+    Serial.print(ypr[1] * 180/M_PI);
+    Serial.print("\t");
+    Serial.println(ypr[2] * 180/M_PI);
+#endif
+```
+
+However with the teapot output, the `fifoBuffer` is not parsed, certain parts of it are copied directly into a `teapotPacket` which is then sent out as data via `Serial.write(teapotPacket, 14)`.
+
+```c
+#ifdef OUTPUT_TEAPOT
+    // display quaternion values in InvenSense Teapot demo format:
+    teapotPacket[2] = fifoBuffer[0];
+    teapotPacket[3] = fifoBuffer[1];
+    teapotPacket[4] = fifoBuffer[4];
+    teapotPacket[5] = fifoBuffer[5];
+    teapotPacket[6] = fifoBuffer[8];
+    teapotPacket[7] = fifoBuffer[9];
+    teapotPacket[8] = fifoBuffer[12];
+    teapotPacket[9] = fifoBuffer[13];
+    Serial.write(teapotPacket, 14);
+    teapotPacket[11]++; // packetCount, loops at 0xFF on purpose
+#endif
+```
+
+Looking more closely at the `teapotPacket`, we can see [2 - 9] are `unint8_t`'s which get filled with values from the `fifobuffer`, with some packet identifiers at the start and the end:
+
+```c
+// packet structure for InvenSense teapot demo
+uint8_t teapotPacket[14] = { '$', 0x02, 0,0, 0,0, 0,0, 0,0, 0x00, 0x00, '\r', '\n' };
+```
+
+Now, over to the Processing sketch, room for the `teapotPacket` is declared at the beginning, and float array called `q`:
+
+```java
+float[] q = new float[4];
+
+...
+
+char[] teapotPacket = new char[14];  // InvenSense Teapot packet
+```
+
+Rowberg does some nifty synchronisation later on the make sure the packet is being received correctly, from which I will certainly pinch some features..:
+
+```java
+if (synced == 0 && ch != '$') return;   // initial synchronization - also used to resync/realign if needed
+synced = 1;
+print ((char)ch);
+
+if ((serialCount == 1 && ch != 2)
+    || (serialCount == 12 && ch != '\r')
+    || (serialCount == 13 && ch != '\n'))  {
+    serialCount = 0;
+    synced = 0;
+    return;
+}
+```
+
+Then the meat of the packet parsing is done here:
+
+```java
+q[0] = ((teapotPacket[2] << 8) | teapotPacket[3]) / 16384.0f;
+q[1] = ((teapotPacket[4] << 8) | teapotPacket[5]) / 16384.0f;
+q[2] = ((teapotPacket[6] << 8) | teapotPacket[7]) / 16384.0f;
+q[3] = ((teapotPacket[8] << 8) | teapotPacket[9]) / 16384.0f;
+for (int i = 0; i < 4; i++) if (q[i] >= 2) q[i] = -4 + q[i];
+
+// set our toxilibs quaternion to new data
+quat.set(q[0], q[1], q[2], q[3]);
+```
+
+I don't understand what the `/ 16384.0f` is doing, but I assume it's part of the conversion of data from the IMU into Quaternion data which is usable. The point is is that the data seems to come in pairs, where the first 8 bits gets shifted by 8 bits and then bitwise OR'd witht the second part: `(teapotPacket[2] << 8) | teapotPacket[3]`
+
+And then some other maths, not sure what that's doing.. But __then__ it gets stored in a [Quaternion object](http://toxiclibs.org/docs/core/toxi/geom/Quaternion.html) from the [toxiclibs library](http://toxiclibs.org/). From what I can see, much like my own `Vec3d` class (and any other in the world), it is a simple container of floats, but with some useful methods. The key method used in this sketch for rendering purposes is `quat.toAxisAngle()` which is used to rotate the rendered object in the right ways:
+
+```java
+// toxiclibs direct angle/axis rotation from quaternion (NO gimbal lock!)
+// (axis order [1, 3, 2] and inversion [-1, +1, +1] is a consequence of
+// different coordinate system orientation assumptions between Processing
+// and InvenSense DMP)
+float[] axis = quat.toAxisAngle();
+rotate(axis[0], -axis[1], axis[3], axis[2]);
+```
+
+According to the [toxiclibs documentation](http://toxiclibs.org/docs/core/toxi/geom/Quaternion.html#toAxisAngle()), the `toAxisAngle()` function __Converts the quaternion into a float array consisting of: rotation angle in radians, rotation axis x,y,z__ and then __Returns: 4-element float array__. This scared me as Quaternion maths looks like a whole meaty and time-consuming topic, but [this stackoverflow post](https://stackoverflow.com/questions/52584715/how-can-i-convert-a-quaternion-to-an-angle) potentially makes it all very simple:
+
+![Stackoverflow QuatToAxisAngle](https://live.staticflickr.com/65535/49243216532_9e1c7bda1f_z.jpg)
+
+So _maybe_ __all I need to do__ is make my own Quarternion class, with a `quatToAxisAngle()` method (as described above) and rotate my vectors accordingly! Let's see how that goes... :cold_sweat:

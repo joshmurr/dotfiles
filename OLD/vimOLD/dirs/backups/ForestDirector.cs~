@@ -1,0 +1,164 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class ForestDirector : MonoBehaviour
+{
+    public List<ForestElement> forestElements;
+
+    [Header("Sounds")] 
+    public AudioClip treeGameWin;
+
+    public osc_sender sender;
+
+
+    private AudioSource _audio;
+    // Start is called before the first frame update
+    void Start()
+    {
+        /*int TreeIDCounter = 0;
+        foreach (ForestElement element in forestElements)
+        {
+            element.Init(this);
+            //creating a map which keeps track of the trees activity
+            if (element.GetType()==typeof(Tree))
+            {
+                //I give the tree an ID that matches the position on the activetreesmap.
+                element.elementID = TreeIDCounter;
+                activeTreesMap.Add(false);
+                Debug.Log ("TREE FOUND!");
+                TreeIDCounter++;
+            }
+        }*/
+        _audio = GetComponent<AudioSource>();
+        sender.SendDataTo(100, "clear");
+        InitTreeGame();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    void StartLightShow(int lightShowType)
+    {
+        switch (lightShowType)
+        {
+            case 1:
+
+                break;
+            
+            case 2:
+
+                break;
+            
+            case 3:
+
+                break;
+        }
+    }
+
+    #region TheHut
+
+    public Hut hut;
+
+    void InitHut()
+    {
+        hut.Init(this);
+    }
+    
+
+    #endregion
+    
+    #region  TreeMiniGame
+
+    /*The tree minigame is done this way: we have an ordered list of trees.
+    thye light up one at a time to signal they can be activated. When the button on a lit tree is pressed,
+    it gets to a small animation and the next in line is lit up. States will be used this way:
+    - Inactive: this tree is currently off and if pressed it resets the minigame
+    - Active: this tree is lit. It takes input from the players and if so moves to the next one.
+    - Special 1: when the tree has taken input it's doing a little looping animation
+    */
+    
+    //Here we put a list of all trees. The sequence is the order of trees in the list.
+    //The list NEEDS to be populated :)
+    [Header("Tree Game List")]
+    public List<ForestTree> forestTrees;
+    public int counter = 0;
+    private int i;
+    
+    public void InitTreeGame()
+    {
+        //forestTrees.Clear();
+        i = 0; 
+        //resetting all tree states
+        foreach (ForestTree t in forestTrees)
+        {
+            t.ChangeState(ForestElement.ElementStates.inactive);
+            t.Init(this, i++, "tree");
+        }
+        //setting the first tree active
+        forestTrees[0].ChangeState(ForestElement.ElementStates.active);
+        counter = 0;
+        _audio.Stop();
+
+        Debug.Log("forestTrees length: " + forestTrees.Count);
+    }
+
+    //this gets called by the tree if the button is pressed when it's active
+    public void NextTree()
+    {
+        
+        if (counter == forestTrees.Count-1)
+        {
+            
+            //all the trees do a light show then get back to all inactive
+            foreach (ForestTree t in forestTrees)
+            {
+                t.ChangeState(ForestElement.ElementStates.special2);
+            }
+
+            _audio.clip = treeGameWin;
+            _audio.loop = true;
+            _audio.Play();
+        }
+        else
+        {
+            counter++;
+            forestTrees[counter].ChangeState(ForestElement.ElementStates.active);
+        }
+    }
+    
+    #endregion
+
+    //ok this is not the best, but...
+    //everytime a trees changes states from active to inactive
+    //the activetreesmap is updated accordingly.
+    //then I check if all the trees in the forest are on
+    /*public void TreeActiveState (int ID, bool state)
+    {
+        activeTreesMap[ID] = state;
+        if (state&&CheckAllTrees())
+        {
+            //do lightshow or whatever
+            //for example:
+            foreach(ForestElement e in forestElements)
+            {
+                e.ChangeState(ForestElement.ElementStates.special1);
+            }
+        }  
+    }
+
+    
+    
+    bool CheckAllTrees()
+    {
+        foreach (bool isActive in activeTreesMap)
+        {
+            if (!isActive) return false;
+        }
+        return true;
+    }*/
+}

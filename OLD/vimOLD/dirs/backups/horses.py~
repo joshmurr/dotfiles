@@ -1,0 +1,28 @@
+import turtle
+
+
+def newHorse():
+    horse = turtle.Turtle()
+    return horse
+
+
+def generateHorses(num_horses):
+    horses = []
+    for k in range(0, num_horses):
+        horse = newHorse()
+        horses.append(horse)
+
+    return horses
+
+
+def placeHorses(horses, loc, seperation):
+    for k in range(0, len(horses)):
+        horses[k].hideturtle()
+        horses[k].penup()
+        horses[k].setposition(loc[0], loc[1] + k * seperation)
+        horses[k].setheading(180)
+        horses[k].showturtle()
+
+# ---- main
+
+# init number of horses

@@ -1,0 +1,10 @@
+# LOG_00
+## 16-01-20
+
+## Intro
+
+Pandoc was the best tool I could find for converting Markdown to PDF but it does create some issues in the conversion. Images are sometimes put out of order with the text as they should be, and GIF's are rendered as still images unfortunately. All the information is there and it doesn't read too badly, but it isn't as nicely formatted as on Github.
+
+The video's are shown as a still from the video on YouTube, and that image is a link to the video. I've tried to be clear wherever possible what is an image and what is a link to a video.
+
+Text hyperlinks are emboldened and I've used full URLs so should work. 

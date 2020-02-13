@@ -1,0 +1,172 @@
+import os
+import sys
+import requests
+import operator
+import re  # RegEx
+import nltk
+import json
+from flask import Flask, render_template, request, jsonify, redirect
+from flask_sqlalchemy import SQLAlchemy
+from stop_words import stops
+from collections import Counter
+from bs4 import BeautifulSoup
+from rq import Queue  # Redis Queue
+from rq.job import Job
+from worker import conn
+
+
+app = Flask(__name__)
+app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+q = Queue(connection=conn)
+
+
+def count_and_save_words(url):
+    errors = []
+
+    from models import Result
+    # Check if the URL is already in the database
+    check = Result.query.filter_by(url=url).first()
+    if check is not None:
+        return check.id
+
+    # get url the user has entered
+    try:
+        r = requests.get(url)
+    except:
+        errors.append("Unable to get URL. Please make sure it's valid and try again.")
+        return {"error": errors}
+
+    # text processing
+    raw = BeautifulSoup(r.text, features="html.parser").get_text()
+    nltk.data.path.append('./nltk_data/')  # set the path
+    tokens = nltk.word_tokenize(raw)
+    text = nltk.Text(tokens)
+
+    # remove punctuation, count raw words
+    nonPunct = re.compile('.*[A-Za-z].*')
+    raw_words = [w for w in text if nonPunct.match(w)]
+    raw_word_count = Counter(raw_words)
+
+    # stop words
+    no_stop_words = [w for w in raw_words if w.lower() not in stops]
+    no_stop_words_count = Counter(no_stop_words)
+
+    # save the results
+    try:
+        result = Result(
+                url=url,
+                result_all=raw_word_count,
+                result_no_stop_words=no_stop_words_count
+                )
+        db.session.add(result)
+        db.session.commit()
+        return result.id
+    except:
+        errors.append("Unable to add item to database.")
+        return {"error": errors}
+
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    return render_template('index.html')
+
+
+@app.route('/start', methods=['POST'])
+def get_counts():
+    # get url
+    #  {"url":"https://news.ycombinator.com/"}
+    data = json.loads(request.data.decode())
+    #  {'url': 'https://news.ycombinator.com/'}
+    url = data["url"].lower()
+    #  https://news.ycombinator.com/
+    if 'www.' in url:
+        url = url.replace('www.', '')
+    if 'https://' not in url[:8]:
+        if 'http://' not in url[:7]:
+            url = 'https://' + url
+    if url[-1] != '/':
+        url += '/'
+
+    # start job
+    job = q.enqueue_call(
+            func="app.count_and_save_words", args=(url,), result_ttl=5000
+            )
+    return job.get_id()
+
+
+@app.route('/results/<job_key>', methods=['GET'])
+def get_results(job_key):
+    job = Job.fetch(job_key, connection=conn)
+
+    if job.is_finished:
+        from models import Result
+        result = Result.query.filter_by(id=job.result).first()
+        results = sorted(
+                result.result_no_stop_words.items(),
+                key=operator.itemgetter(1),
+                reverse=True
+                )[:10]
+        results = [{"word": r[0], "count": r[1]} for r in results]
+        return jsonify(results)
+    else:
+        return "Nay!", 202
+
+
+@app.route('/display', methods=['GET'])
+def display():
+    return render_template('display_all.html')
+
+
+@app.route('/display_single', methods=['POST', 'GET'])
+def single():
+    errors = []
+    from models import Result
+    print("Arg is: {}".format(request.args.get("id")))
+    try:
+        result = Result.query.filter_by(id=request.args.get("id")).first()
+        # return render_template('display_single.html', item=result.serialize_full())
+        return jsonify(result.serialize_full())
+    except:
+        for error in sys.exc_info():
+            errors.append("Error: {}".format(error))
+        return jsonify(errors)
+
+
+
+@app.route('/delete', methods=['GET'])
+def delete():
+    # DELETE
+    errors = []
+    from models import Result
+    try:
+        print("DELETING {}".format(request.args.get("item")))
+        to_delete = Result.query.filter_by(id=request.args.get("id")).first()
+        db.session.delete(to_delete)
+        db.session.commit()
+        return redirect('/display')
+    except:
+        for error in sys.exc_info():
+            errors.append("Error: {}".format(error))
+        return jsonify(errors)
+
+
+@app.route('/get_all_entries', methods=['GET', 'POST'])
+def display_all():
+    from models import Result
+    errors = []
+    # Fetch things from db
+    try:
+        results = Result.query.all()
+        ret = [result.serialize_full() for result in results]
+        return jsonify(ret)
+    except:
+        for error in sys.exc_info():
+            errors.append("Error: {}".format(error))
+        return jsonify(errors)
+
+
+if __name__ == "__main__":
+    app.run()

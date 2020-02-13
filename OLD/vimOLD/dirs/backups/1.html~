@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <script src = "https://mimicproject.com/libs/nexusUI.js"></script>
+        <script src="https://mimicproject.com/libs/maximilian.js"> </script>
+        <title>1</title>
+    </head>
+    <body>
+        <div id="oscilloscope"></div>
+        <div id="spectrogram"></div>
+
+        <script src="1.js"> </script>
+    </body>
+</html>

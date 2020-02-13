@@ -1,0 +1,33 @@
+from displayscheduledworkerhours import *
+
+def executeScheduledSimulation(probabilities, days, time_slots):
+    """Displays a simulated week of worker in attendance for all 
+    time slots, based on a scheduled worker schedule.
+    """
+
+    # for each day of the week
+    for day in days:
+        print(day)
+        print('--------')
+
+        if (day == 'Sunday'): # sunday?
+            current_timeslot = '12:00pm'
+            num_timeslots = 3
+        elif day in days[1:5]: # mon-thurs?
+            current_timeslot = '8:00am'
+            num_timeslots = 5
+        else: # friday, saturday
+            current_timeslot = '8:00am'
+            num_timeslots = 6
+
+        # find loc of current_timeslot in tuple time_slots
+        index_val = time_slots.index(current_timeslot)
+
+        # iterate through num_timeslots starting with current time slot
+        for time_slot in time_slots[index_val: index_val + num_timeslots]:
+            print('{0:>7}'.format(time_slot), ' ', end='')
+
+            for k in range(0,2):
+                displayScheduledWorkerHours(k+1, probabilities)
+                # print()
+        print()   

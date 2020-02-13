@@ -1,0 +1,105 @@
+# LOG 10
+## 14-01-20
+
+## Home Improvements
+
+For proper testing to occur soon I need to make some changes to the design. Some things I've been meaning to tackle are:
+
+- New LEDs for debugging purposes, and to make it clear what is happening in the code.
+- A front panel for the switch to sit in and to hold the new LEDs.
+- Reconfigured power arrangment and layout.
+
+### Front Panel
+
+It is in this process that a well consider modular design _really_ pays off. It was not too much hassle to amend the design of a part in Fusion 360, print a new version and then swap it out for the orginal on the headset. The first thing was to give myself some new mounting points on the headset to attach the front panel to.
+
+![Mounting Points on Fusion](https://live.staticflickr.com/65535/49384970766_3e56cb6591_z.jpg)
+
+![Mounting Points RL](https://live.staticflickr.com/65535/49376258812_70ffb3c8eb_z.jpg)
+
+Some minor surgery as I swap out the old piece for the new:
+
+![Swapping out front ring](https://live.staticflickr.com/65535/49376258562_a0dbef8c63_z.jpg)
+
+I took the opportunity to redesign the eye-cups, as the previous versions were superglued together and hot-glued in place. The new ones are bolted together and the bolted to the headset, in keeping with the rest of the build:
+
+![New Eye cups in Fusion](https://live.staticflickr.com/65535/49384504943_b5edc874ea_z.jpg)
+
+![New Eye cups in RL](https://live.staticflickr.com/65535/49376258327_2218898f34_z.jpg)
+
+And on to the front panel:
+
+![Front panel in Fusion](https://live.staticflickr.com/65535/49385168437_39d043729a_z.jpg)
+
+To ceck the fit of the switch and the LEDs I printed just that section first of all. It was a good job I did as this was too tight and broke shortly after the photograph:
+
+![Front panel snippet in Fusion](https://live.staticflickr.com/65535/49384504983_eba86646b4_z.jpg)
+
+![Front panel snippet](https://live.staticflickr.com/65535/49384914356_e4316bd638_z.jpg)
+
+![Front panel attached](https://live.staticflickr.com/65535/49376054376_19bc80d4cb_c.jpg)
+
+To finish off the work with the new front panel, I made a basic little breakout board for the LEDs, wired it up and tested them all (video):
+
+[![Testing LEDs](https://img.youtube.com/vi/iVnOiDzxFNU/0.jpg)](https://www.youtube.com/watch?v=iVnOiDzxFNU)
+
+![Front panel printed](https://live.staticflickr.com/65535/49384914766_dbc10f98f1_z.jpg)
+
+![Front panel printed behind](https://live.staticflickr.com/65535/49384448923_0703c55b93_z.jpg)
+
+
+The top half of the panel went through a few iterations, mostly down to trying to design something which is easily 3D printable. My first version went through large radius fillet to an angle change of 90 degress, but this turned out to be incredibly wastful and inefficient to 3D print:
+
+![Slic3r Top Panel](https://live.staticflickr.com/65535/49384970701_8170702fa3.jpg)
+
+So I changed the angles and the curves and came up with something I could 3D print witout any support material. And something I think looks better too:
+
+![Finished panel in Fusion 1](https://live.staticflickr.com/65535/49385168237_b226ba7809.jpg)
+
+![Finished panel in Fusion 2](https://live.staticflickr.com/65535/49384970586_bf59c190d3.jpg)
+
+> Pictures of this when printed later on...
+
+## Rethinking Power
+
+I've known for a while that the motors have had incredibly underwhelming vibration capabilities. I cheked the voltage over some working motors and was reading 0.57V:
+
+![0.57V](https://live.staticflickr.com/65535/49376259302_97e31e92ba.jpg)
+
+I've deliberately been keeping the voltage low (or at 3.3V, hence the 3.3V regulator circuits) in order to protect the motors and the circuit generally. But the lack of power was evident. I don't _really_ know what is going on here, as by my understanding I have 15 motors in two seperate __parallel__ circuits, so they should all be getting 3.3V (?), but I guess not. Any way, I tried bypassing the regulator circuit stright from the 9V battery and the motors gained new life. So that was the new plan.
+
+Now to redesign the power for the whole headset. I would need a new 9V positive bus, and a 5V bus for the new LEDs on the front panel. This meant making some new little power boards (simple rails which become +5V, +9V and GND). One of the following boards is split in two, the other will be entirely common ground:
+
+![New power distribution boards](https://live.staticflickr.com/65535/49385112202_2e24c3ee08.jpg)
+
+This would need a new mount for the headset:
+
+![New Power board mount in Fusion](https://live.staticflickr.com/65535/49384659353_490a48667d.jpg)
+
+I also designed a new mount for the LED breakout board which takes the place of one of the 3.3V regulator circuits. The other 3.3V reg is now used to power the 1W LEDs in the eyes.
+
+Some surgery taking place:
+
+![Some surgery](https://live.staticflickr.com/65535/49385111847_b1ff584223_c.jpg)
+
+Finally, while I was making modifications, I decided to add a Light-Dependant Resistor in the mix just to add another input to detect when the headset is being worn. This meant designing a new little mounting hole in the rear half of the main ring to hold it. After making sure the basic circuit works I did just that:
+
+![LDR Circuit](https://live.staticflickr.com/65535/49384915146_32480b56d9.jpg)
+
+![LDR Nipple](https://live.staticflickr.com/65535/49384970666_5c0e432ae2.jpg)
+
+![LDR Being Installed](https://live.staticflickr.com/65535/49384449338_91ceb0fd25.jpg)
+
+So as not to make another breakout board I put the resistor inline, and put dupont connectors on the ends of the wires coming from the LDR:
+
+![LDR Inline Resistor](https://live.staticflickr.com/65535/49384915486_8ccca2dabd.jpg)
+
+![LDR in pLace](https://live.staticflickr.com/65535/49376257017_0d78b7644e.jpg)
+
+![More Surgery](https://live.staticflickr.com/65535/49376051291_baee091a27.jpg)
+
+I think this concludes all home-improvements!
+
+![Selfie](https://live.staticflickr.com/65535/49384915711_53f11e2077_c.jpg)
+
+![Selfie 2](https://live.staticflickr.com/65535/49384915671_5d14c2f97e_c.jpg)

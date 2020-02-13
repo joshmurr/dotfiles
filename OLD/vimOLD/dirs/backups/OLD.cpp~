@@ -1,0 +1,139 @@
+#include "ofApp.h"
+
+//--------------------------------------------------------------
+void ofApp::setup(){
+    video.load("sample.mp4");
+    video.play();
+
+    //setup FBO
+    fbo.allocate(videoWidth, videoHeight);
+
+
+    fbo.begin();
+    ofClear(255,255,255,0);
+    fbo.end();
+
+    // Set up vertices
+    for (int y=0; y<H; y++){
+        for (int x=0; x<W; x++){
+            mesh.addVertex(ofPoint((x-W/2) * meshSize, (y-H/2) * meshSize, 0));
+            mesh.addTexCoord(ofVec2f(x*(videoWidth/W), y*(videoHeight/H)));
+            mesh.addColor(ofColor(255,255,255));
+        }
+    }
+
+    //Setup Triangles
+    for(int y=0; y<H-1; y++){
+        for(int x=0; x<W-1; x++){
+
+            int i1 = x+W*y;
+            int i2 = x+1+W*y;
+            int i3 = x+W*(y+1);
+            int i4 = x+1+W*(y+1);
+            mesh.addTriangle(i1, i2, i3);
+            mesh.addTriangle(i2, i4, i3);
+        }
+    }
+
+}
+
+//--------------------------------------------------------------
+void ofApp::update(){
+    fbo.readToPixels(fboPixels);
+    image.setFromPixels(fboPixels);
+    for (int y=0; y<H; y++){
+        for (int x=0; x<W; x++){
+
+            int i = x + W * y;
+            ofPoint p = mesh.getVertex(i);
+
+            float scaleX = videoWidth / W;
+            float scaleY = videoHeight / H;
+
+            // get brightness
+            int index = ((x * scaleX) + videoWidth * (y * scaleY)) * 4;
+            int brightness = fboPixels[index] / 4;
+
+            //Change Z-coord of vertex
+            //
+            p.z = brightness; //ofNoise(x * 0.05, y * 0.05, ofGetElapsedTimef() * 0.5) * 100;
+            mesh.setVertex(i, p);
+
+            mesh.setColor(i, ofColor(255,255,255));
+        }
+    }
+
+    video.update();
+}
+
+//--------------------------------------------------------------
+void ofApp::draw(){
+
+    ofBackground(0);
+    ofSetHexColor(0xffffff);
+
+    //fbo.draw(0,0);
+
+    ofPushMatrix();
+    ofTranslate(ofGetWidth()/2, ofGetHeight()/2, 0);
+    image.bind();
+    mesh.draw();
+    image.unbind();
+//    mesh.drawWireframe();
+    ofPopMatrix();
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::keyReleased(int key){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseMoved(int x, int y ){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseDragged(int x, int y, int button){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::mousePressed(int x, int y, int button){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseReleased(int x, int y, int button){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseEntered(int x, int y){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::mouseExited(int x, int y){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::windowResized(int w, int h){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::gotMessage(ofMessage msg){
+
+}
+
+//--------------------------------------------------------------
+void ofApp::dragEvent(ofDragInfo dragInfo){ 
+
+}

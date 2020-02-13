@@ -1,0 +1,46 @@
+const playButton = document.getElementById('playButton');
+//create a maximilian object
+var maxi = maximilian();
+
+//create an audio engine
+var maxiEngine = new maxi.maxiAudio();
+
+//create two oscillators
+var osc1 = new maxi.maxiOsc();
+var osc2 = new maxi.maxiOsc();
+var osc3 = new maxi.maxiOsc();
+var osc4 = new maxi.maxiOsc();
+var filter = new maxi.maxiFilter();
+
+var oscilloscope,spectrogram;
+
+//when the play button is pressed...
+let playAudio = () => {
+
+      //arrange play button
+      playButton.style.display="none";
+      //start the audio engine
+
+      maxiEngine.init();
+      //maxiEngine.outputIsArray(true, 2);
+      //show an oscilloscope and freqscope
+      Nexus.context = maxiEngine.context;
+      oscilloscope = new Nexus.Oscilloscope('oscilloscope', {'size': [600,200]}).connect(maxiEngine.maxiAudioProcessor);
+      spectrogram = new Nexus.Spectrogram('spectrogram', {'size': [600,200]}).connect(maxiEngine.maxiAudioProcessor);
+
+      maxiEngine.play = function() {
+          let oscFreq = Math.pow(((osc3.sinewave(0.3) + 1) /2), 2) * 200 + 20;
+          let filterFreq = Math.pow(((osc3.coswave(0.14) + 1) /2), 2) * 2000 + 40;
+
+          //let w = osc1.sinewave(oscFreq) * 0.5;
+          //let w = osc2.sinewave(myFreq) * 0.5;
+          let w = (osc1.sawn(oscFreq) + osc2.sawn(oscFreq * 1.001)) * 0.5;
+          w = filter.hires(w, 10000, 0);
+         
+          //let w = (osc1.sawn(oscFreq) + osc2.sawn(oscFreq * 1.001)) * 0.5 
+          //w = filter.lores(w, filterFreq, 8);
+          return w;
+      }
+}
+
+playButton.addEventListener("click", () => playAudio());

@@ -1,0 +1,51 @@
+# LOG 03
+## 10-11-19
+
+## Bitshifting
+
+I spent a lot of time this week getting my head around bitshifting with the 74HC595 IC and Arduino, and then getting that working with my ongoing C++ application, and it was relatively successful I'd say!
+
+First I felt I had bitshifting figured out in terms of the Ardiuno code when I could get more than one LED of my choosing to light up. (Video):
+
+[![Bitshifting](https://img.youtube.com/vi/Mit_4kuG9FI/0.jpg)](https://www.youtube.com/watch?v=Mit_4kuG9FI)
+
+Next I needed the output of the app to start comminicating with the Arduino, so depending on where this animating circle was on the screen, the LED on the Arduino ffffd turn on or off (video):
+
+[![led on off](https://img.youtube.com/vi/pKLNWKdIboY/0.jpg)](https://www.youtube.com/watch?v=pKLNWKdIboY)
+[![led on off](https://img.youtube.com/vi/gu9B4rf_Ef4/0.jpg)](https://www.youtube.com/watch?v=gu9B4rf_Ef4)
+
+Then I created a target class - when the pink circle collided with a target it would return the target number (video):
+
+[![Output Num](https://img.youtube.com/vi/J_ijTmjlc_0/0.jpg)](https://www.youtube.com/watch?v=J_ijTmjlc_0)
+
+I then started playing with the idea of sending a data packet to the Arduino. I could have had it send a char, or a string, and have the Arduino parse the data and turn that into an instruction, which is fine, but I'm bitshifting here! So why send any unecessary amount of data just to manipulate bits? I wanted to put the effort into understanding some bitwise operations, and send nothing more complex than byte data over serial for the Arduino to receive and do minimal parsing.
+
+The `Target::contact` function returns an `int` which references which target is in contact. This is passed to the following array which contains the byte of information (stored as hex values) to send to the Arduino:
+
+```c++
+dataArray[0] = 0x00; //0b00000000
+dataArray[1] = 0x80; //0b10000000
+dataArray[2] = 0x40; //0b01000000
+dataArray[3] = 0x20; //0b00100000
+dataArray[4] = 0x10; //0b00010000
+dataArray[5] = 0x08; //0b00001000
+dataArray[6] = 0x04; //0b00000100
+dataArray[7] = 0x02; //0b00000010
+dataArray[8] = 0x01; //0b00000001
+```
+
+The Arduino can then use this information straight into it's `shiftOut` function which sends this byte of information to the 74HC595 which in turn turns the relevant pins on or off. This is great because I can then do simple bitwise addition, which will never amount to more than one byte [per 74HC595 IC], of data. So if I want pin 2, 4 and 5 turned on, I can just send 0b00011010, or 0x1A.
+
+```
+ 00000010  - Pin 2
++00001000  - Pin 4
++00010000  - Pin 5
+ --------
+ 00011010  = 0x1A
+```
+
+I will likely need to extend this to two 74HC595's so I can control more little vibration motors, but I presume this is where my data will turn into packet. And it's quite simple to send two separate bytes, and then concatenate them with a `<< 8` operation. I think.
+
+[The Arduino code can be found here](https://github.com/joshmurr/cci_pcomp/blob/master/project/Arduino/bitshift_CPP/bitshift_CPP.ino). Which includes code taken from [__Tom Igoes example found here__](https://www.arduino.cc/en/Tutorial/ShiftOut).
+
+And the latest [__C++ code can be found here__](https://github.com/joshmurr/cci_pcomp/tree/master/project/main/cpp).

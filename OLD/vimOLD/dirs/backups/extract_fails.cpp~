@@ -1,0 +1,77 @@
+#include <list>
+#include "grade.h"
+#include "extract_fails.h"
+
+using std::vector;
+using std::list;
+
+// Using Lists, which are better optimised for random removal
+
+list<Student_info> extract_fails(list<Student_info>& students){
+    list<Student_info> fail;
+    list<Student_info>::iterator iter = students.begin(); //.begin() returns an iterator
+
+    while(iter != students.end()){ // .end() also returns an iterator
+        if(fgrade(*iter)) { // dereference iterator (the student in the vector)
+            fail.push_back(*iter);
+            // Means of accessing vector at i using erase (?)
+            iter = students.erase(iter); // .erase(iter) returns next item (iterator) in vector
+        } else
+            ++iter;
+    }
+    return fail;
+}
+
+/*
+ *vector<Student_info> extract_fails(vector<Student_info>& students){
+ *    vector<Student_info> fail;
+ *    vector<Student_info>::iterator iter = students.begin(); //.begin() returns an iterator
+ *
+ *    while(iter != students.end()){ // .end() also returns an iterator
+ *        if(fgrade(*iter)) { // dereference iterator (the student in the vector)
+ *            fail.push_back(*iter);
+ *            // Means of accessing vector at i using erase (?)
+ *            iter = students.erase(iter); // .erase(iter) returns next item (iterator) in vector
+ *        } else
+ *            ++iter;
+ *    }
+ *    return fail;
+ *}
+ */
+
+/*
+ *   Method 2, better but could be... better
+ *
+ *vector<Student_info> extract_fails(vector<Student_info>& students){
+ *    vector<Student_info> fail;
+ *    vector<Student_info>::size_type i = 0;
+ *
+ *    while(i != students.size()){
+ *        if(fgrade(students[i])) {
+ *            fail.push_back(students[i]);
+ *            // Means of accessing vector at i using erase (?)
+ *            students.erase(students.begin() + i);
+ *        } else
+ *            ++i;
+ *    }
+ *    return fail;
+ *}
+ */
+
+
+/*    
+ *    Memory inefficient as it effectively creates a copy of the entire input vector
+ *
+ *vector<Student_info> extract_fails(vector<Student_info>& students){
+ *    vector<Student_info> pass, fail;
+ *
+ *    for(vector<Student_info>::size_type i=0; i!=students.size(); ++i){
+ *        if(fgrade(students[i]))
+ *            fail.push_back(students[i]);
+ *        else
+ *            pass.push_back(students[i]);
+ *    }
+ *    students = pass;
+ *    return fail;
+ *}
+ */

@@ -1,0 +1,49 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class cubeMover : MonoBehaviour
+{
+    [SerializeField] bool movingUp = false;
+    [SerializeField] bool movingDown = false;
+    [SerializeField] bool movingLeft = false;
+    [SerializeField] bool movingRight = false;
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    void Update(){
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+            movingLeft = true;
+            movingRight = false;
+            Vector3 position = this.transform.position;
+            position.x--;
+            this.transform.position = position;
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow)) {
+            movingRight = true;
+            movingLeft = false;
+            Vector3 position = this.transform.position;
+            position.x++;
+            this.transform.position = position;
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow)) {
+            movingUp = true;
+            movingDown = false;
+            Vector3 position = this.transform.position;
+            position.y++;
+            this.transform.position = position;
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow)) {
+            movingUp = false;
+            movingDown = true;
+            Vector3 position = this.transform.position;
+            position.y--;
+            this.transform.position = position;
+        }
+
+    }
+
+}

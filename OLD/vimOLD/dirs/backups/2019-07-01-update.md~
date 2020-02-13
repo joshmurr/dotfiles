@@ -1,0 +1,36 @@
+---
+layout: post
+title: "Update"
+date: 2019-07-01
+---
+
+Evidently I've let a few months go by without any update on here, but I've kept busy regardless.
+
+### Maths
+
+![kahn1](../../../assets/images/update/kahn1.png)
+![kahn2](../../../assets/images/update/kahn2.png)
+
+I kept up with the maths on Kahn Academy. I finished the Precalculus course and moved on to the Differential Calculus. Still maths which I did at A-Level but a little harder to get into. Good to be doing some calculus with machine learning in mind, but I've shelved the maths for a little while to focus on learning C++.
+
+### C++
+<a href="https://www.udemy.com/free-learn-c-tutorial-beginners/">![cpp](../../../assets/images/update/cpp.png) </a>
+
+I'm currently about 70% through this Udemy C++ course. It's my first time enrolling on a Udemy course and this one isn't bad. It's a little slow and could potentially be more thorough, but it is good practice to see C++ used from scratch. The outcome will be a particle simulator too which I always enjoy. Once I've worked through this I hopefully will have enough understanding to write simeple graphical applications in C++ with basic graphics libraries, like SDL. I have in mind to create some some cellula automata programs. And also to return to the ofxBoids library with newfound C++ knowledge.
+
+### Speakers and Amplifier
+
+Something I've wanted to do for years is to make my own speakers and an amplifier set up. So I've finally begun that process with a pretty simple set up. The speaker drivers are 5" 8ohm full range 20W nominal Visaton's. And the amp consists of a small [Velleman pre-amp kit build](https://quasarelectronics.co.uk/Item/velleman-k8084-volume-tone-control-pre-amplifier-kit) and a 30W [Velleman power amp kit](https://quasarelectronics.co.uk/Item/velleman-k4003-2-x-30w-stereo-audio-power-amplifier-kit). I'm yet to test anything...
+
+![speaker](../../../assets/images/update/speaker.png)
+
+### CS50 — Intro to Computer Science
+
+<a href="https://online-learning.harvard.edu/course/cs50-introduction-computer-science">![cs50](../../../assets/images/update/cs50.png)</a>
+
+I read in an article somewhere that this was a good online course to take, and it does seem like a good one after the first lecture and a half. It gets into C programming early and then works up through the abstractions, up to working with Python and JavaScript. I've been wanting to do some pure C programming and this seems like a nice primer to get into.
+
+I think that's all that is necessary for an update. I have also been working at an architecture school as a workshop technician and I've been reading some books. But maybe more about those things another time.
+
+<br>
+Josh

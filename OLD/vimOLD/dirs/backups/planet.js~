@@ -1,0 +1,66 @@
+class Planet extends Shape {
+
+    constructor(x, y, z, radius){
+        super(x, y, z);
+        this.radius = radius;
+        this.slices = 20;
+        this.segments = 20;
+    }
+
+    makePoints(){
+        this.updateSpacing();
+        for(let i=0; i<this.slices; i++){
+            let z = this.radius*2 * Math.cos(this.spacing/2 * i);
+            let s = this.radius*2 * Math.sin(this.spacing/2 * i);
+            for(let j=0; j<this.segments; j++){
+                let p = new Vec3d(Math.cos(this.spacing*j)*s, Math.sin(this.spacing*j)*s, z);
+                this.points.push(p);
+            }
+        }
+    }
+
+    drawLines(context, FOV){
+        let x3d, y3d, z3d;
+
+        context.strokeStyle = "rgb("+(255)+",255,"+0+")";
+        for (let i = 0; i<this.slices; i++) {
+            // For each RING
+            let firstPoint;
+            let firstScale;
+            let color = Math.floor((255/this.slices)*i);
+            context.beginPath();
+            for (let j = 0; j < this.segments; j++ ) {
+
+                // For each SEGMENT
+                let point3d = this.points[j+this.slices*i];
+                z3d = point3d.z;
+                //z3d -= 1;
+                if (z3d < -FOV) z3d += 10;
+                point3d.z = z3d;
+
+                point3d = this.rotateX(point3d);
+                point3d = this.rotateY(point3d);
+                point3d = this.rotateZ(point3d);
+
+                x3d = point3d.x;
+                y3d = point3d.y;
+                z3d = point3d.z + this.z;
+
+                let scale = (FOV / (FOV + z3d));
+
+                let x2d = ((x3d * scale) + HALF_WIDTH / 2) + this.x;
+                let y2d = ((y3d * scale) + HALF_HEIGHT) + this.y;
+
+                if(!j) {
+                    firstPoint = new Vec2d(x2d, y2d);
+                    firstScale = scale;
+                }
+
+                context.lineWidth = scale;
+                context.lineTo(x2d + scale, y2d);
+            }
+            context.lineTo(firstPoint.x + firstScale, firstPoint.y);
+            context.stroke();
+        }
+    }
+}

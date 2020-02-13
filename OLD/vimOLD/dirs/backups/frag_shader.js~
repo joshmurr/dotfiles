@@ -1,0 +1,97 @@
+const settings ={
+    animate: !/static/i.test(window.location.search),
+    context: "webgl"
+};
+
+const sketch = ({context}) => {
+    const renderer = new THREE.WebGLRenderer({
+        context
+    });
+
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 100);
+    camera.position.set(2, 2, -4);
+    camera.lookAt(new THREE.Vector3());
+
+    //const controls = new THREE.OrbitControls(camera, context.canvas);
+    //controls.enableZoom = false;
+
+    const scene = new THREE.Scene();
+
+    const geometry = new THREE.CylinderGeometry(1, 1, 2, 6, 32);
+
+    const material = new THREE.ShaderMaterial({
+        vertexShader: `
+            uniform float time;
+            varying vec3 myNormal;
+            varying vec2 vUv;
+            void main() {
+                float angle = time/2.0;
+                mat4 rotateX = mat4(1,0,0,0,0,cos(angle),sin(angle),0,0,-sin(angle),cos(angle),0,0,0,0,1);
+                myNormal = normal;
+
+                vec3 vert = position.xyz;
+
+                float stretch = time;
+
+                vert.xz *= sin(position.y + stretch);
+
+                vec4 rotatedPos = vec4(vert, 1.0) * rotateX;
+
+                myNormal = normalize(rotatedPos.xyz*1.2);
+
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * rotatedPos;
+            }
+        `,
+        fragmentShader: `
+            uniform float time;
+            varying vec3 myNormal;
+            varying vec2 vUv;
+            #define PI = 3.14;
+            
+            void main(){
+                vec3 light = vec3(0., 10., 5.);
+                vec3 invert = vec3(1., 1., 1.);
+                vec3 color = vec3(0.0);
+
+                color.r = abs(sin(vUv.x + time));
+                color.g = abs(cos(vUv.y + time));
+                color.b = abs(sin(vUv.y + time));
+
+                invert = myNormal * invert;
+                light = normalize(light);
+                float prod = max(0.2, dot(myNormal, light));
+
+                gl_FragColor = vec4(prod * color, 1.0);
+            }
+        `,
+        uniforms: {
+            time: {value: 0}
+        },
+        wireframe: false
+    });
+
+    const mesh = new THREE.Mesh(geometry, material);
+
+    scene.add(mesh);
+
+    return {
+        resize({ pixelRatio, viewportWidth, viewportHeight }) {
+            renderer.setPixelRatio(pixelRatio);
+            renderer.setSize(viewportWidth, viewportHeight);
+            camera.aspect = viewportWidth / viewportHeight;
+            camera.updateProjectionMatrix();
+        },
+        render({ time }) {
+            material.uniforms.time.value = time;
+//            controls.update();
+            renderer.render(scene, camera);
+        },
+        unload() {
+ //           controls.dispose();
+            renderer.dispose();
+        }
+    };
+};
+
+canvasSketch(sketch, settings);

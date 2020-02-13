@@ -1,0 +1,41 @@
+const embed_platonic = document.querySelector(".embed_platonic");
+const embed_shader = document.querySelector(".embed_shader");
+const embeds = [embed_platonic, embed_shader];
+const aspect = 16 / 9;
+const padding = 50;
+const maxFrameWidth = Infinity;
+
+function resize() {
+    const maxFrameHeight = window.innerHeight * 0.5;
+    embeds.forEach(embed => {
+        const parentElement = embed.parentElement;
+        if (!parentElement) return;
+        const rect = parentElement.getBoundingClientRect();
+
+        const parentWidth = rect.width;
+        const parentHeight = rect.height;
+
+        const windowAspect = parentWidth / parentHeight;
+        const scaleToFitPadding = 0;
+        const maxWidth = Math.min(
+            maxFrameWidth,
+            Math.round(parentWidth - padding * 2)
+        );
+        let width;
+        let height;
+        if(embed.className == "embed_platonic") {
+            width = maxWidth/2.5;
+            height = width;
+        } else if(embed.className == "embed_shader") {
+            width = maxWidth;
+            height = Math.round(width / aspect);
+        }
+        embed.setAttribute("width" , width);
+        embed.setAttribute("height" , height);
+        //embed.height = height;
+        embed.style.width = `${width}px`;
+        embed.style.height = `${height}px`;
+    });
+}
+resize();
+window.addEventListener("resize", resize);

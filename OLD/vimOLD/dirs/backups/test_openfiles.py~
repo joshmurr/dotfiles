@@ -1,0 +1,25 @@
+from module_openfiles import *
+
+empty_str = ''
+print('TESTING FUNCTION openFiles')
+
+try:
+    # open data files
+    smoking_datafile, cancer_datafile = openFiles()
+
+    # display successfully opened
+    print('Data files successfully opened')
+
+    # display first line of smoking data file
+    print('\nReading first line of smoking data file...')
+    line = smoking_datafile.readline()
+    print(line.strip('\n'))
+
+    # display first line of cancer data file
+    print('\nReading first line of cancer data file...')
+    line = cancer_datafile.readline()
+    print(line.strip('\n'))
+
+except IOError:
+    print('Too many attempts of opening input files')
+    print('Program terminated')

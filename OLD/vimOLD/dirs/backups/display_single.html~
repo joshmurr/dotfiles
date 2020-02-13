@@ -1,0 +1,38 @@
+{% extends "display.html" %}
+
+{% block display %}
+
+<!-- DISPLAY SINGLE -->
+
+<div class="row">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Website</th>
+                <th>Most Used Word</th>
+                <th>Count</th>
+                <th>Words</th>
+            </tr>
+        </thead>
+        <tbody>
+            <td>{{ item.url }}</td>
+            <td>{{ item.top_word }}</td>
+            <td>{{ item.frequency }}</td>
+            <td>
+                {% for word in item.words %}
+                <span>{{ word }}<br></span>
+                {% endfor %}
+            </td>
+        </tbody>
+    </table>
+</div>
+<form class="form-inline" action="/delete" method="GET" ng-init="update_selected()">
+    <div class="input-group col-sm">
+        <input type="hidden" ng-model="id_box" name="id" value="{{item.id}}"/>
+        <div class="input-group col-sm">
+            <button class="btn btn-primary" type="submit">Delete</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

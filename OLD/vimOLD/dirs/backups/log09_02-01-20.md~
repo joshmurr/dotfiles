@@ -1,0 +1,136 @@
+# LOG 09
+## 03-01-20
+
+## Looking at the Sun
+
+Things seem to be going _OK_... The video below shows that I now have the origin axes drawn, as are commonly seen in 3D graphics. I can also check for the alignment of the heading vector of the headset (for which I am using it's direction along it's X axis) and the "sun" which I have in the top left corner -ish (video):
+
+[![looking at the sun](https://img.youtube.com/vi/ac8Iw2_GuvI/0.jpg)](https://www.youtube.com/watch?v=ac8Iw2_GuvI)
+
+The algorithm for checking alignment is as follows, which took some trial and error:
+
+```c++
+double Object::lookingAtSun(Vec3d &sun){
+    // If close to -1 then they are pretty aligned
+    Vec3d heading = this->axes[0];
+    Vec3d sunHeading = sun - this->origin;
+
+    heading.normalise();
+    sunHeading.normalise();
+
+    double alignment = sunHeading.dot(heading);
+
+    return alignment;
+}
+```
+
+## BUG
+
+Shortly after this I had a nightmare of a bug. For some completely unknown reason the Arduino ceased syncing with the C++ app. _As far as I could tell_ it just stopped working like it used to. After a couple hours of headscratching, commenting and `std::cout`-ing I rolled back to a previous working version. Honestly, that working version was further back than I would have liked so from now on I will be committing to Git more often. I have never actually done that before, but it was a good experience, and I really see the point of Git even more now, it was super easy to checkout a branch, play around with an older version and find the bug, and then move forward again with the new knowledge. Any way, the solution is in how I now sync with the Arduino, there are more frequent checks for sync-ness early on, and the ability for the user to send another 'trigger' byte to the Arduino.
+
+## Arduino Receiving a Data Packet
+
+It turns out Arduino has the same `serialEvent()` built-in function like Processing does so I coule pretty much copy+paste the Processing function (Rowberg's of course) into my Arduino code and it worked! The 'hello!' appearing in the Arduino serial monitor in the video below is my test packet being send _to_ the Arduino:
+
+[![Arduino rx data packet](https://img.youtube.com/vi/E8jeoDgc_40/0.jpg)](https://www.youtube.com/watch?v=E8jeoDgc_40)
+
+Here is there Arduino code, basically the same as the Processing code:
+
+```c++
+void serialEvent(){
+  interval = millis();
+    while (Serial.available() > 0) {
+        uint8_t ch = Serial.read();
+
+        if (synced == 0 && ch != '$') return;
+        synced = 1;
+        //Serial.println((char)ch);
+
+        if ((serialCount == 1 && ch != 2)
+            || (serialCount == 12 && ch != '\r')
+            || (serialCount == 13 && ch != '\n'))  {
+            serialCount = 0;
+            synced = 0;
+            return;
+        }
+
+        if (serialCount > 0 || ch == '$') {
+            rx_packet[serialCount++] = ch;
+            if (serialCount == 14) {
+                serialCount = 0; // restart packet byte position
+            }
+        }
+    }
+}
+```
+
+Besing able to send a proper data packet to the Arduino will be much easier to work with than trying to send individual bytes. The ability to syncronise properly and then pick out chunks of the data packet will mean I can send multiple commands in one packet.
+
+## Bright Eyes When Looking at the Sun
+
+Going back to the 'looking at the sun' thing, I worked on a little algorithm to interpolate the brightness level based on alignment with the sun:
+
+```c++
+lookingAtSunVal = headset.lookingAtSun(sunOrigin);
+if(lookingAtSunVal < -0.7 && lookingAtSunVal > -1.3){
+    double dVal = lookingAtSunVal + 1.3;
+    dVal *= 1.67;
+    dVal = 1.0 - dVal + 0.5;
+    dVal *= dVal;
+    if(dVal > 1.0) dVal = 1.0;
+    if(dVal < 0) dVal = 0;
+    int val = dVal * 255;
+    cout << val << endl;
+    lightsOn[2] = val;
+    lookingAtSun = true;
+} else {
+    lightsOn[3] = 0;
+    lookingAtSun = false;
+}
+```
+
+`lightsOn` is one of two packets I have to send to the Arduino. This is just for now, I think I'll end up making a data packet class:
+
+```c++
+uint8_t lightsOn[8] = {'l', 'v', 0, 0, 0, 0, 0, 0};
+uint8_t lightsOff[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+```
+
+These are sent via the Serial class using the following:
+
+```c++
+int Serial::serialport_write_teapot(uint8_t *packet){
+    uint8_t teapot[14] = {'$', 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0x00, 0x00, '\r', '\n' };
+
+    teapot[2] = packet[0];
+    teapot[3] = packet[1];
+    teapot[4] = packet[2];
+    teapot[5] = packet[3];
+    teapot[6] = packet[4];
+    teapot[7] = packet[5];
+    teapot[8] = packet[6];
+    teapot[9] = packet[7];
+
+    int len = 14;
+    int n = write(fd, teapot, len);
+    if(n != len) return -1;
+    return 0;
+}
+```
+It is the same packet structure as defined in Rowberg's code. The `lightsOn` or `lightsOff` packets above are mini packets which I copy into the `teapotPacket` to then send to the Arduino. Having the markers are the start and the end of the packet allow for the syncronisation code to work.
+
+Now, back over in the Arduino code, after receiving the packet I can parse the data somewhat and change the eye brightness!
+
+```c++
+if(rx_packet[2] == 'l') {
+    analogWrite(LEFT_EYE, (int)rx_packet[4]);
+    analogWrite(RIGHT_EYE, (int)rx_packet[4]);
+} else if(rx_packet[2] == 0){
+    analogWrite(LEFT_EYE, 15);
+    analogWrite(RIGHT_EYE, 15);
+}
+```
+
+(Not the best video, as it's a bit too bright, but you can see the eyes changing):
+
+[![changing eye brightness](https://img.youtube.com/vi/2-1i_mTZKeY/0.jpg)](https://www.youtube.com/watch?v=2-1i_mTZKeY)

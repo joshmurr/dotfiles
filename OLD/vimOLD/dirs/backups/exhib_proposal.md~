@@ -1,0 +1,15 @@
+Josh Murr
+j.murr0720191@arts.ac.uk
+CCI
+MSc Creative Computing
+
+
+I would like to make my very own Plato's Cave. Ultimately some sort of simulation, but not one which is self-contained with a set with parameters and isolated from the world; rather one which is influenced and driven by the outside world. The simulation would have agents each with an AI of their own, who can interact with one another and their environment, much like an Ian Cheng or Sam Twidale piece.
+
+The outside influence (the shadows being cast) would be the data the simulation receives and then interprets through it's ML models (the mediating fire). The character profiles of the agents could be based on real-world people, using data scraped from Twitter or Facebook profiles, and the world itself could in some way be reactive to real-world events, but also mediated through online news sources; perhaps it would all be via Twitter. To gain character profiles sentiment analysis could be performed on scraped text, and also information from facial recognition and analysis — age/gender/ethnicity/happy/sad/etc. I'm initially drawn to the SDface Surveillance Camera data set, but there are many which would be interesting to look at. Sterling University has a dataset of 3D faces which could even make it into the digital world. 
+
+The project would be utilising many skills we have been introduced in the first term at CCI, namely 3D graphics. I imagine I would build the engine using JavaScript and THREE.js to manage the graphics. It also makes sense to build this in JavaScript as I can imagine this actually running in a browser which would allow me to structure the entire project much like a web app which has a front-end (the graphical output), but also a back-end which I could manage with Python and SQL. I wouldn't say I was an expert in any of these processes, but it's all stuff I'm comfortable and familiar with. The ML and AI programming is what is new to me but I'm not daunted by it. As this is an idea I've been thinking of for a while, I can see it sitting in amongst my other work so learning the requisite skills would not feel like a burden on my workload.
+
+For the exhibition I can only imagine needing a screen and a computer to run the simulation on. For development I wouldn't need anything extra. The computers at CCI are set up specifically for graphics and ML purposes, so I'd like to put them through their paces if I can!
+
+I've attached some images so you can get a sense of what I'm imagining.

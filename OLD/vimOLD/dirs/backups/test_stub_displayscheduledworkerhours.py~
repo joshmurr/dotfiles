@@ -1,0 +1,5 @@
+def displayScheduledWorkerHours(workernum, probabilites):
+    if workernum == 1:
+        print('workernum = ', workernum, end='')
+    else:
+        print('workernum = ', workernum)

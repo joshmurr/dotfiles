@@ -1,0 +1,36 @@
+[submodule "vim/bundle/vim-colors-solarized"]
+	path = vim/bundle/vim-colors-solarized
+	url = https://github.com/altercation/vim-colors-solarized
+[submodule "vim/bundle/nerdtree"]
+	path = vim/bundle/nerdtree
+	url = https://github.com/preservim/nerdtree
+[submodule "vim/bundle/vim-buffergator"]
+	path = vim/bundle/vim-buffergator
+	url = https://github.com/jeetsukumaran/vim-buffergator
+[submodule "vim/bundle/tagbar"]
+	path = vim/bundle/tagbar
+	url = https://github.com/majutsushi/tagbar
+[submodule "vim/bundle/gundo.vim"]
+	path = vim/bundle/gundo.vim
+	url = https://github.com/sjl/gundo.vim
+[submodule "vim/bundle/ctrlp.vim"]
+	path = vim/bundle/ctrlp.vim
+	url = https://github.com/ctrlpvim/ctrlp.vim
+[submodule "vim/bundle/syntastic"]
+	path = vim/bundle/syntastic
+	url = https://github.com/vim-syntastic/syntastic
+[submodule "vim/bundle/vim-easymotion"]
+	path = vim/bundle/vim-easymotion
+	url = https://github.com/easymotion/vim-easymotion
+[submodule "vim/bundle/incsearch.vim"]
+	path = vim/bundle/incsearch.vim
+	url = https://github.com/haya14busa/incsearch.vim
+[submodule "vim/bundle/vim-argwrap"]
+	path = vim/bundle/vim-argwrap
+	url = https://github.com/FooSoft/vim-argwrap/
+[submodule "vim/bundle/vim-fugitive"]
+	path = vim/bundle/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive
+[submodule "vim/bundle/vim-autoformat"]
+	path = vim/bundle/vim-autoformat
+	url = https://github.com/Chiel92/vim-autoformat

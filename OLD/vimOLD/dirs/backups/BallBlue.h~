@@ -1,0 +1,9 @@
+#pragma once
+
+#include "ofMain.h"
+#include "ball.h"
+
+class BallBlue : public Ball {
+    public:
+        virtual void draw();
+}

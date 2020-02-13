@@ -1,0 +1,196 @@
+from turtle import *
+import time
+
+
+def getNumDisks():
+    num_disks = int(input('Enter the number of disks(2-8): '))
+
+    while num_disks < 2 or num_disks > 8:
+        print('Must select between 2 and 8 disks')
+        num_disks = int(input('Enter the number of disks(2-8): '))
+
+    return num_disks
+
+
+def displayPegs(peg_locs):
+    peg_image = 'Peg.gif'
+    register_shape(peg_image)
+
+    offset = 65
+
+    temp = Turtle()
+    temp.penup()
+    temp.shape(peg_image)
+
+    for loc in peg_locs:
+        temp.setposition(loc[0], loc[1] + offset)
+        temp.stamp()
+
+
+def getDiskImage(num):
+    images = []
+    disk_image = 'Disk-1.gif'
+
+    for k in range(0, num):
+        images = ['Disk-' + str(k+1) + '.gif'] + images
+
+    return images
+
+
+def registerDiskImages(images):
+    for image in images:
+        register_shape(image)
+
+
+def newPeg(image_file):
+    peg = Turtle()
+    peg.hideturtle()
+    peg.shape(image_file)
+
+    return peg
+
+
+def newDisk(image_file):
+    disk = Turtle()
+    disk.penup()
+    disk.hideturtle()
+    disk.shape(image_file)
+
+    return disk
+
+
+def createDisks(images):
+    disks = [[], [], []]
+
+    for k in range(0, len(images)):
+        disks[0].append(newDisk(images[k]))
+        disks[1].append(None)
+        disks[2].append(None)
+
+    return disks
+
+
+def calcDiskLocations(num_disks, peg_locs, seperation):
+    saved_seperation = seperation
+    all_disk_locations = []
+
+    for peg in range(0, 3):
+        disk_locs = []
+
+        for k in range(0, num_disks):
+            xloc = peg_locs[peg][0]
+            yloc = int(peg_locs[peg][1] + k * seperation)
+
+            disk_locs.append((xloc, yloc))
+            seperation = seperation * 0.95
+
+        all_disk_locations.append(disk_locs)
+        seperation = saved_seperation
+    return all_disk_locations
+
+
+def placeDisksOnStartPeg(start_peg, disks, locations):
+    for k in range(0, len(disks[start_peg])):
+        disks[start_peg][k].setposition(locations[start_peg][k])
+
+
+def makeDisksVisible(start_peg, disks):
+    for k in range(0, len(disks[start_peg])):
+        disks[start_peg][k].showturtle()
+
+
+def removeTopDisk(peg, disks):
+    k = len(disks[peg]) - 1
+    found = False
+
+    while k >= 0 and not found:
+        if disks[peg][k] is not None:
+            disk = disks[peg][k]
+            disks[peg][k] = None
+            found = True
+        else:
+            k = k - 1
+
+    return disk
+
+
+def placeTopDisk(disk, peg, disks, disk_locations):
+    k = 0
+    found = False
+
+    while k < len(disk_locations[peg]) and not found:
+        if disks[peg][k] == None:
+            disks[peg][k] = disk
+            found = True
+        else:
+            k = k + 1
+
+    return disk
+
+
+def getNextAvailDiskLoc(peg, disks, disk_locations):
+    k = 0
+    found = False
+
+    while k < len(disks[peg]) and not found:
+        if disks[peg][k] == None:
+            loc = disk_locations[peg][k]
+            found = True
+        else:
+            k = k + 1
+    return loc
+
+
+def moveDisk(from_peg, to_peg, disks, disk_locations):
+    disk = removeTopDisk(from_peg, disks)
+
+    new_loc = getNextAvailDiskLoc(to_peg, disks, disk_locations)
+
+    disk.goto(new_loc)
+
+    placeTopDisk(disk, to_peg, disks, disk_locations)
+
+
+def towers(start_peg, dest_peg, spare_peg, num_disks, disks, disk_locations):
+    if num_disks == 1:
+        moveDisk(start_peg, dest_peg, disks, disk_locations)
+        time.sleep(.5)
+    else:
+        towers(start_peg, spare_peg, dest_peg,
+               num_disks - 1, disks, disk_locations)
+        moveDisk(start_peg, dest_peg, disks, disk_locations)
+        towers(spare_peg, dest_peg, start_peg,
+               num_disks - 1, disks, disk_locations)
+
+
+# ---- main
+print('This program solves the Towers of Hanoi for up to eight disks')
+setup(width=800, height=600)
+peg_locations = ((-150, -50), (0, -50), (150, -50))
+disk_seperation = 24
+
+peg_A = 0
+peg_B = 1
+peg_C = 2
+
+num_disks = getNumDisks()
+print()
+
+displayPegs(peg_locations)
+
+disk_images = getDiskImage(num_disks)
+registerDiskImages(disk_images)
+
+disk_locs = calcDiskLocations(num_disks, peg_locations, disk_seperation)
+disks = createDisks(disk_images)
+
+placeDisksOnStartPeg(peg_A, disks, disk_locs)
+
+makeDisksVisible(peg_A, disks)
+
+time.sleep(2)
+
+towers(peg_A, peg_C, peg_B, num_disks, disks, disk_locs)
+
+print('\nDone - Click sreen to quit')
+exitonclick()

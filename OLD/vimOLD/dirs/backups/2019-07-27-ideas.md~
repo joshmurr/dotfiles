@@ -1,0 +1,17 @@
+---
+layout: post
+title: "Ideas"
+date: 2019-07-27
+---
+
+James Bridle talks a fair bit about online automation and how it's flooding the internet with weird and quite damaging content, such as violent childrens YouTube videos and rape themed tee-shirts. Without knowing for certain where the content is coming from, it can be assumed that a lot or most of it if from automated processes without much vetting happening.
+
+Got me wondering how easy could this be to reproduce myself?
+
+#Auto YouTube Cartoon
+Could ML algorithms figure out what is the most click-baity/addictive/shareable animated video on YouTube, and could that entire process then be automated? With a selection of downloadable sprites and motion-capture rigs; backgrounds; sounds; etc. could all of this be programmatically hashed together in an automated way and uploaded to YouTube once a week? I presume one could make some of these ideas work with Unity.
+
+Or perhaps a similar concept would be to set up a 3D environment of characters each with their own AI personalities which develop and change over time, all being constantly filmed (like Big Brother). This content is then chopped up into 10 minute segments, edited and uploaded to YouTube.
+
+<br>
+Josh

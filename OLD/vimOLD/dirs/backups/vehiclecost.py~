@@ -1,0 +1,32 @@
+class VehicleCost:
+    def __init__(self, daily_rate, weekly_rate, weekend_rate,
+                 free_miles, per_mile_chrg, insur_rate):
+        self.__daily_rate = daily_rate
+        self.__weekly_rate = weekly_rate
+        self.__weekend_rate = weekend_rate
+        self.__free_miles = free_miles
+        self.__per_mile_chrg = per_mile_chrg
+        self.__insur_rate = insur_rate
+
+    def getDailyRate(self):
+        return float(self.__daily_rate)
+
+    def getWeeklyRate(self):
+        return float(self.__weekly_rate)
+
+    def getWeekendRate(self):
+        return float(self.__weekend_rate)
+
+    def getFreeMiles(self):
+        return int(self.__free_miles)
+
+    def getPerMileCharge(self):
+        return float(self.__per_mile_chrg)
+
+    def getInsuranceRate(self):
+        return float(self.__insur_rate)
+
+    def getCosts(self):
+        return [self.__daily_rate, self.__weekly_rate,
+                self.__weekend_rate, self.__free_miles,
+                self.__per_mile_chrg, self.__insur_rate]

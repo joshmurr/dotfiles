@@ -1,0 +1,15 @@
+#include "ofMain.h"
+
+class Particle {
+    public:
+        Particle();
+        void setup();
+        void update(float dt);
+        void draw();
+
+        ofPoint pos;
+        ofPoint vel;
+        float time;
+        float lifetime;
+        bool live;
+};

@@ -1,0 +1,85 @@
+<html>
+<head>
+	<title>JM:Land Generator</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function() {
+            $('#accordion').accordion({collapsible: true, heightStyle: "content", active: false});
+        });
+    </script>
+</head>
+<body class="black">
+    <nav>
+        <h1 id="name">Josh Murr<h1>
+        <div  id="accordion">
+            <h2>Drawings</h2>
+                <div>
+                    <ul>
+                        <li><a href="IMAGES.html">IMAGES</a>
+                        <li><a href="IMAGE+VIDEO.html">IMAGE+VIDEO</a>
+                        <li><a href="VIDEO.html">VIDEO</a>
+                        <li><a href="hair.html">Hair</a>
+                        <li><a href="infinite.html">Infinite</a>
+                    </ul>
+                </div>
+            <!--- -->
+            <h2>Generative</h2>
+                <div>
+                    <ul>
+                        <li><a href="generative_frame.html">Generative Frame</a>
+                        <li><a href="generative_typeface.html">Generative Typeface</a>
+                        <li><a href="generative_works.html">Generative Works</a>
+                        <li><a href="sticker_generator.html">Sticker Generator</a>
+                        <li><a href="open_source_typeface.html">Open Source Typeface</a>
+                    </ul>
+                </div>
+            <!--- -->
+            <h2>3D</h2>
+                <div>
+                    <ul>
+                        <li><a href="morse_code_story.html">Morse Code Story</a>
+                        <li><a href="pitfields.html">Pitfields Display</a>
+                        <li><a href="wooden_things.html">Wooden Things</a>
+                    </ul>
+                </div>
+            <!--- -->
+            <h2>Misc.</h2>
+                <div>
+                    <ul>
+                        <li><a href="ar_comic.html">AR Comic</a>
+                        <li><a href="land_generator.html">Land Generator</a>
+                        <li><a href="mood_balloon.html">Mood Balloon</a>
+                        <li><a href="ssdii.html">SSDII</a>
+                        <li><a href="brainchild_2015.html">Brainchild 2015</a>
+                    </ul>
+                </div>
+            <!--- -->
+            <h2 id="wordplay_button"><a>Wordplay<a></h2>
+            <br>
+            <h2><a href="r_and_d/r_and_d.html">R_and_D</a></h2>
+            <br>
+            <h2 id="about_button">About</h2>
+            <h2 id="contact_button">Contact</h2>
+            <h2 id="links_button">Links</h2>
+        </div>
+    </nav>
+	<div id="right">
+		<iframe src="http://player.vimeo.com/video/63588269" width="500" height="313" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+		<img src="project/land/01.png">
+		<img src="project/land/02.png">
+		<img src="project/land/03.png">
+	</div>
+
+	<div id="nav">
+		<h2 id="info_button">Info</h2>
+		<h2><a href="index.html">Back</a></h2>
+	</div>
+	<div id="info">
+		<p>A <a href="http://processing.org/">Processing</a> application which takes the surface elevation data over a given area of land determined by a given lat/long co-ordinate and displays this as a moveable 3D shape with colour determined by the height at each point. The application take this data from a search using the <a href="https://developers.google.com/maps/">Google Maps API</a>.</p>
+		<p>The bottom right image shows the peak of Mt Everest.</p>
+	</div>
+</body>
+</html>

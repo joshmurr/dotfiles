@@ -1,0 +1,7 @@
+import nltk
+from nltk.tag import pos_tag, map_tag
+
+text = nltk.word_tokenize("A very simple sentence.")
+posTagged = pos_tag(text)
+simplifiedtags = [(word, map_tag('eg-ptb', 'universal', tag)) for word, tag in posTagged]
+print(simplifiedtags)

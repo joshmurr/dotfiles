@@ -1,0 +1,17 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script language="javascript" type="text/javascript" src="vectors.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas">
+    </canvas>
+</body>
+</html>

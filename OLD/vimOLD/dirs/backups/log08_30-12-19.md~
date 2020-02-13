@@ -1,0 +1,146 @@
+# LOG 08
+## 02-01-20
+
+## Rotation
+
+I added the following rotation matrices to my `Object` class:
+
+![Rotation Matrices](https://live.staticflickr.com/65535/49393953496_667f878daf_o.png)
+
+For example `rotateX` is below:
+
+```c++
+void Object::rotateX(double theta){
+    double cosTheta = cos(theta);
+    double sinTheta = sin(theta);
+
+    for(std::vector<Vec3d>::iterator p=this->points.begin(); p!=this->points.end(); ++p){
+        p->y = cosTheta*p->y - sinTheta*p->z;
+        p->z = sinTheta*p->y + cosTheta*p->z;
+    }
+}
+```
+
+Here is `rotateX` in action:
+
+![rotateX](https://media.giphy.com/media/lSTzR4cCG2Aosa6Rlb/giphy.gif)
+
+And then rotating in all axes:
+
+![rotateXYZ](https://media.giphy.com/media/iDJKfsahDVrrOjDdgL/giphy.gif)
+
+Now comes the harder bit which is to receive the data packet from the Arduino in the correct format and parse the data.
+
+## Receiving Data
+
+The rotation matrix derived from the _axis angle_ (which is what I want) is given below:
+
+![Rotation matrix from axis angle](https://live.staticflickr.com/65535/49393480268_65d4ffa88f_o.png)
+
+Looks like a headache, but with some [other sources](https://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToMatrix/index.htm) I _think_ I have translated it to code correctly in the following function:
+
+```c++
+void Object::rotateAxisAngle(double* axis){
+
+    ...
+
+    for(std::vector<Vec3d>::iterator p=this->points.begin(); p!=this->points.end(); ++p){
+        // Store as temps:
+        double tx = p->x;
+        double ty = p->y;
+        double tz = p->z;
+
+        p->x = (cosT+ax2*t)*tx + (ax*ay*t-(az*sinT))*ty + (ax*az*t+(ay*sinT))*tz;
+        p->y = (ay*ax*t+az*sinT)*tx + (cosT+ay2*t)*ty + (ay*az*t-(ax*sinT))*tz;
+        p->z = (az*ax*t-(ay*sinT))*tx + (az*ay*t+(ax*sinT))*ty + (cosT+az2*t)*tz;
+    }
+}
+```
+
+I missed out a chunk of code there, but `ax`, `ay` and `az` are the axis angles, `ax2` is `ax`^2, `cosT` is cosine(theta) and `t` is theta. Rather than just deriving the matrix I am applying it directly to the vectors which make up the headset.
+
+Surprisingly it didn't work first time :man_shrugging: And after some poking around thinking the matrix maths was wrong, or I missed a sign here or there. I'm pretty sure it's in my naive attempt at receiving the data packet. Jeff Rowberg does some neat syncronisation in his Processing Sketch which is what I think I need to implement now. Not syncing it at all must be what is giving me a load of garbage data (`NaN NaN NaN`).
+
+## __FOUND AN ERROR__
+
+
+I have been struggling to read any data from the Arduino getting all sorts of random garbage:
+
+![Garbage](https://media.giphy.com/media/LSXmiiqTRKraX0KBMW/giphy.gif)
+
+Anything I tried I just couldn't get anything which made sense from the Arduino. Occasional glimmers of hope but all turned out to be rubbish. Turns out the `-b 115200` argument when running the app wasn't actually setting the baudrate because I had hardcoded it when I made the Serial class:
+
+```c++
+Serial::Serial(int argc, char* argv[]){
+    argc = argc;
+    argv = argv;
+    fd = 0;
+    baudrate = B9600;
+    DEBUG = false;
+    synced = 0;
+    serialCount = 0;
+}
+```
+So I had mismatched baudrates (all day) which was giving me nonsense data. The "hello jm" in the following image is my test packet from the Arduino which indicates some progress!
+
+![hello jm](https://live.staticflickr.com/65535/49316791411_f4d02481a6_n.jpg)
+
+I can now re-implement some of the syncronisation code from Jeff Rowberg's example which does seem to do the trick!
+
+```c++
+if(this->synced == 0 && b[0] != '$') {
+    std::cout << "Not synced A" << std::endl;
+    return -1;
+}
+this->synced = 1;
+
+
+//// If any of the following are true, it is not synced:
+if((this->serialCount==1 && b[0] != 2)
+        || (this->serialCount==12 && b[0] != '\r')
+        || (this->serialCount==13 && b[0] != '\n')) {
+    this->serialCount = 0;
+    this->synced = 0;
+    std::cout << "Not synced B" << std::endl;
+    return -1; // Return and try again
+}
+
+if(this->serialCount > 0 || b[0] == '$') {
+    // Copy into Teapot
+    this->teapot[this->serialCount++] = b[0];
+
+    if(this->serialCount == 14){
+        this->serialCount = 0;
+        //std::cout << "serialCount Reset" << std::endl;
+    }
+}
+```
+
+The rotation in the video below is from the `rotateAxisAngle()` function which I mentioned above using data from the Arduino `teapotPacket`, hooray! (Video):
+
+[![axisAngle rotation](https://img.youtube.com/vi/VKLt0bH6-eo/0.jpg)](https://www.youtube.com/watch?v=VKLt0bH6-eo)
+
+And in the video below you can see the headset actually causing the rotation on the virtual headset on screen. This is a big milestone! However, you can also see the rotation seems to just spin the headset round and round, rather than it truly reflecting what is in real life (which is how the Jeff Rowberg Processing sketch seems to work). At least I am finally back on the right tracks... (Video):
+
+[![headset IMU rotation](https://img.youtube.com/vi/DCgwfeW-680/0.jpg)](https://www.youtube.com/watch?v=DCgwfeW-680)
+
+## More Quarternion Confusion
+
+Turns out I haven't been able to completely by-pass learning _a bit_ about quarternions and just copy the code straight over. Clearly I am doing something wrong/different, as in Rowberg's example, and aslo this Python verion [__found here__](https://github.com/thecountoftuscany/PyTeapot-Quaternion-Euler-cube-rotation), when they rotate something with a quarternion the object being rotate just assumes the new direction. When I rotate with a quarternion, the object keeps on rotating and the speed of rotation is governed by the angle of my quarternion:
+
+![rotating quat](https://media.giphy.com/media/U1rH53o8gPeHL6YL6l/giphy.gif)
+
+In my endless Googling (or DuckDuckGo-ing) I came across [__this__](https://stackoverflow.com/questions/13014973/quaternion-rotate-to) article which explains a different method of rotating and object to face a particular directon.
+
+A slightly different process but one worth investigating I suppose...
+
+Scrap that, just had some success with what is potentially a pretty hacky fix. Given that my algorithm would continually rotate the object, I just stored the previous angle and used the difference in the rotation:
+
+```c++
+float theta = axis[0] - oldTheta;
+this->oldTheta = axis[0];
+```
+
+This has done the trick for now, but I have a nagging feeling it will come back to haunt me. Video below (quite bad quality, sorry):
+
+[![axisAngle rotation](https://img.youtube.com/vi/HhY-vLwaczc/0.jpg)](https://www.youtube.com/watch?v=HhY-vLwaczc)

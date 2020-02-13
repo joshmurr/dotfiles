@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script>
+		window.onload = function() {
+			var canvas = document.getElementById("canvas"),
+				context = canvas.getContext("2d"),
+				width = canvas.width = window.innerWidth,
+				height = canvas.height = window.innerHeight,
+				cols = 30,
+				rows = 20,
+				arrows = [];
+		
+			init();
+			globalRender();
+            //console.log('arrows.length = ' + arrows.length);
+		
+			function init(){
+				for(var i=0; i<rows; i++){
+					for(var ii=0; ii<cols; ii++){
+                        xloc = (ii * (width/cols)) + ((width/cols)/2);
+                        yloc = (i * (height/rows)) + ((height/rows)/2);
+                        //console.log('Arrow: ' + i+ii + ', xloc: ' + xloc + ', yloc: ' + yloc);
+						arrows.push(new arrow(xloc,yloc, i+ii));
+					}
+				}
+			}
+		
+			function globalRender(){
+				context.clearRect(0,0,width,height);
+				for(var j=0; j<arrows.length; j++){
+					arrows[j].render(j);
+				}
+				requestAnimationFrame(globalRender);
+			}
+		
+			function arrow(x_, y_, id_){
+				this.x = x_;
+				this.y = y_;
+				this.angle = 0;
+				this.dx, this.dy;
+                this.id = id_;
+		
+				this.render = function(id2){
+					context.save();
+					context.translate(this.x,this.y);
+					context.rotate(this.angle);
+			
+					context.beginPath();
+					/*context.moveTo(20,0);
+					context.lineTo(-20,0);
+					context.moveTo(20,0);
+					context.lineTo(10,-10);
+					context.moveTo(20,0);
+					context.lineTo(10,10);*/
+                    //context.arc(0,0,20,0,this.angle);
+                    context.arc(15,0,3,0,Math.PI*2);
+					context.fill();
+                    if(id2 == 10){
+                        context.strokeStyle = '#FF0000';
+                        console.log(/*'Arrow.x: ' + this.x + ', Arrow.y: ' + this.y + ', Arrow.angle: ' +*/ this.angle);
+                    } else {
+                        context.strokeStyle = '#000';
+                    }
+					//context.stroke();
+                    /*context.font = "10px Arial";
+                    context.fillText(id2, 0, 0);*/
+					context.restore();
+				}
+			}
+		
+			document.body.addEventListener("mousemove",function(event){
+				for(var k=0; k<arrows.length; k++){
+                    //console.log('MouseX: ' + event.clientX + ', MouseY: ' + event.clientY);
+					arrows[k].dx = event.clientX - arrows[k].x;
+					arrows[k].dy = event.clientY - arrows[k].y;
+					arrows[k].angle = Math.atan2(arrows[k].dy,arrows[k].dx);
+				}
+ //               console.log("Top Left: " + arrows[0].angle);
+                //console.log("Middle: " + arrows[55].angle);
+			});
+		};
+	</script>
+	<style>
+		html,body{
+			margin: 0;
+		}
+		canvas {
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+</body>
+</html>

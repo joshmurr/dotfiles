@@ -1,0 +1,1 @@
+g++ main.cpp serial.cpp screen.cpp vec3d.cpp object.cpp targets.cpp quarternion.cpp -o arduino-serial -lSDL2

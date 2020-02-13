@@ -1,0 +1,15 @@
+#include "Params.h"
+
+
+void Params::setup() {
+    eCenter = ofPoint(ofGetWidth() / 2, ofGetHeight() / 2);
+    eRad = 100;
+    velRad = 0;
+    lifetime = 2.0;
+
+    rotate = 0;
+
+    force = 1000;
+    spinning = 1000;
+    friction = 0.05;
+}

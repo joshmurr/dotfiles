@@ -13,4 +13,7 @@ ln -s ${BASEDIR}/zshrc ~/.zshrc
 ln -s ${BASEDIR}/gitconfig ~/.gitconfig
 
 # tmux
-ln -s ${BASEDIR}/tmux.config ~/.tmux.config
+ln -s ${BASEDIR}/tmux.conf ~/.tmux.conf
+
+# update vim plugins (as Git submodules)
+git submodule update --init --recursive

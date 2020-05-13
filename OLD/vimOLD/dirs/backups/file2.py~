@@ -1,5 +1,0 @@
-inputfile = ('data.txt', 'r')
-outputfile = ('newfile.txt', 'w')
-line = inputfile.readline()
-outputfile.write(line)
-outputfile.close()

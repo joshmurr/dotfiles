@@ -20,15 +20,15 @@ augroup END
 " but it can be set to force 256 colors
 " set t_Co=256
 if has('gui_running')
-    colorscheme solarized
-    let g:lightline = {'colorscheme': 'solarized'}
+    colorscheme monokai
+    let g:lightline = {'colorscheme': 'monokai'}
 elseif &t_Co < 256
     colorscheme default
     set nocursorline " looks bad in this mode
 else
     set background=dark
-    let g:solarized_termcolors=256 " instead of 16 color with mapping in terminal
-    colorscheme solarized
+    let g:monokai_termcolors=256 " instead of 16 color with mapping in terminal
+    colorscheme monokai
     " customized colors
     highlight SignColumn ctermbg=234
     highlight StatusLine cterm=bold ctermfg=245 ctermbg=235
@@ -42,18 +42,22 @@ endif
 filetype plugin indent on " enable file type detection
 set autoindent
 
+if &diff
+    highlight! link DiffText MatchParen
+endif
+
 "---------------------
 " Basic editing config
 "---------------------
 set shortmess+=I " disable startup message
 set nu " number lines
-set rnu " relative line numbering
+" set rnu " relative line numbering
 set incsearch " incremental search (as string is being typed)
 set hls " highlight search
 set listchars=tab:>>,nbsp:~ " set list to see tabs and non-breakable spaces
 set lbr " line break
 set scrolloff=5 " show lines above and below cursor (when possible)
-set noshowmode " hide mode
+" set noshowmode " hide mode
 set laststatus=2
 set backspace=indent,eol,start " allow backspacing over everything
 set timeout timeoutlen=1000 ttimeoutlen=100 " fix slow O inserts
@@ -67,6 +71,7 @@ set expandtab
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
+set nowrap
 " smart case-sensitive search
 set ignorecase
 set smartcase
@@ -84,7 +89,7 @@ endif
 "--------------------
 "
 " Change <Leader> to `
-let mapleader = "§"
+let mapleader = "`"
 
 " unbind keys
 map <C-a> <Nop>
@@ -138,9 +143,17 @@ command -nargs=0 Sudow w !sudo tee % >/dev/null
 " Plugin configuration
 "---------------------
 
+" UltiSnips
+let g:UltiSnipsSnippetsDir= '~/.dotfiles/vim/bundle/UltiSnips/'
+let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+let g:UltiSnipsExpandTrigger="<c-o>"
+let g:UltiSnipsJumpForwardTrigger="<C-b>"
+let g:UltiSnipsJumpBackwardTrigger="<C-z>"
+
 " nerdtree
 nnoremap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>f :NERDTreeFind<CR>
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " buffergator
 let g:buffergator_suppress_keymaps = 1
@@ -211,6 +224,24 @@ let g:markdown_syntax_conceal = 0
 " fugitive
 set tags^=.git/tags;~
 
+" NERD Commenter
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+" Enable NERDCommenterToggle to check all selected lines is commented or not 
+let g:NERDToggleCheckAllLines = 1
+
+" ALE
+" Fix files with prettier, and then ESLint.
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_enter  = 0
+let g:ale_fixers = {}
+let g:ale_fixers.javascript = ['eslint']
+
+
 "---------------------
 " Local customizations
 "---------------------
@@ -220,3 +251,6 @@ let $LOCALFILE=expand("~/.vimrc_local")
 if filereadable($LOCALFILE)
     source $LOCALFILE
 endif
+
+packloadall
+silent! helptags ALL

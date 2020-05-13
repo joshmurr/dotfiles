@@ -1,6 +1,0 @@
-#include <stdio.h>
-
-int main(void){
-    int padding = (4 - (3 * 24) % 4) % 4;
-    printf('%i', padding);
-}

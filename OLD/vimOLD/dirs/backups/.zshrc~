@@ -1,6 +1,0 @@
-autoload -U promptinit; promptinit
-prompt pure
-
-ls --color=auto
-
-ZSH_THEME=""

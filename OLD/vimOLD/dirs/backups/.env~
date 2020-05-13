@@ -1,2 +1,0 @@
-workon word_counter
-export APP_SETTINGS="config.DevelopmentConfig"

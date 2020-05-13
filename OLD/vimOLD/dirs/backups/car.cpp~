@@ -1,7 +1,0 @@
-#include "car.h"
-
-Car::Car(std::string b, std::string m, int y){
-    brand = b;
-    model = m;
-    year = y;
-};

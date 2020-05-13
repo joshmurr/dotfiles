@@ -1,3 +1,9 @@
+### Install a new machine
+
+```bash
+./installer.sh
+```
+
 ### Adding a new module
 
 ```bash

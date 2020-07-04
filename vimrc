@@ -68,9 +68,9 @@ set history=8192 " more history
 set nojoinspaces " suppress inserting two spaces between sentences
 " use 4 spaces instead of tabs during formatting
 set expandtab
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 set nowrap
 " smart case-sensitive search
 set ignorecase
@@ -147,8 +147,8 @@ command -nargs=0 Sudow w !sudo tee % >/dev/null
 let g:UltiSnipsSnippetsDir= '~/.dotfiles/vim/bundle/UltiSnips/'
 let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 let g:UltiSnipsExpandTrigger="<c-o>"
-let g:UltiSnipsJumpForwardTrigger="<C-b>"
-let g:UltiSnipsJumpBackwardTrigger="<C-z>"
+let g:UltiSnipsJumpForwardTrigger="<C-n>"
+let g:UltiSnipsJumpBackwardTrigger="<C-p>"
 
 " nerdtree
 nnoremap <Leader>n :NERDTreeToggle<CR>
@@ -169,7 +169,7 @@ if has('python3')
 endif
 
 " ctrlp
-nnoremap ; :CtrlPBuffer<CR>
+" nnoremap ; :CtrlPBuffer<CR>
 let g:ctrlp_switch_buffer = 0
 let g:ctrlp_show_hidden = 1
 
@@ -233,6 +233,7 @@ let g:NERDCommentEmptyLines = 1
 let g:NERDTrimTrailingWhitespace = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not 
 let g:NERDToggleCheckAllLines = 1
+let g:NERDTreeShowHidden = 1
 
 " ALE
 " Fix files with prettier, and then ESLint.
@@ -240,6 +241,7 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_enter  = 0
 let g:ale_fixers = {}
 let g:ale_fixers.javascript = ['eslint']
+nmap <F10> <Plug>(ale_fix)
 
 " YouCompleteMe
 " Let clangd fully control code completion

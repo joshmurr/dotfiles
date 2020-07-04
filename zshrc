@@ -2,12 +2,15 @@ autoload -U promptinit; promptinit
 prompt pure
 
 unset LSCOLORS
-export CLICOLOR=1
-export CLICOLOR_FORCE=1
+# export CLICOLOR=1
+# export CLICOLOR_FORCE=1
 
 ZSH_THEME=""
 
 source /Users/joshmurr/Library/Preferences/org.dystroy.broot/launcher/bash/br
+
+export EDITOR=vim
+export GREP_OPTIONS="--color"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

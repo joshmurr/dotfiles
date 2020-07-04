@@ -67,3 +67,9 @@
 [submodule "vim/bundle/vim-coloresque"]
 	path = vim/bundle/vim-coloresque
 	url = https://github.com/gko/vim-coloresque
+[submodule "vim/bundle/vim-react-snippets"]
+	path = vim/bundle/vim-react-snippets
+	url = https://github.com/epilande/vim-react-snippets
+[submodule "vim/bundle/vim-es2015-snippets"]
+	path = vim/bundle/vim-es2015-snippets
+	url = https://github.com/epilande/vim-es2015-snippets

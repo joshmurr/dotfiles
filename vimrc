@@ -109,30 +109,6 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
-" movement relative to display lines
-nnoremap <silent> <Leader>d :call ToggleMovementByDisplayLines()<CR>
-function SetMovementByDisplayLines()
-    noremap <buffer> <silent> <expr> k v:count ? 'k' : 'gk'
-    noremap <buffer> <silent> <expr> j v:count ? 'j' : 'gj'
-    noremap <buffer> <silent> 0 g0
-    noremap <buffer> <silent> $ g$
-endfunction
-function ToggleMovementByDisplayLines()
-    if !exists('b:movement_by_display_lines')
-        let b:movement_by_display_lines = 0
-    endif
-    if b:movement_by_display_lines
-        let b:movement_by_display_lines = 0
-        silent! nunmap <buffer> k
-        silent! nunmap <buffer> j
-        silent! nunmap <buffer> 0
-        silent! nunmap <buffer> $
-    else
-        let b:movement_by_display_lines = 1
-        call SetMovementByDisplayLines()
-    endif
-endfunction
-
 " toggle relative numbering
 nnoremap <C-n> :set rnu!<CR>
 
@@ -155,24 +131,6 @@ nnoremap <Leader>n :NERDTreeToggle<CR>
 nnoremap <Leader>f :NERDTreeFind<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-" buffergator
-let g:buffergator_suppress_keymaps = 1
-nnoremap <Leader>b :BuffergatorToggle<CR>
-
-" tagbar
-nnoremap <Leader>t :TagbarToggle<CR>
-
-" gundo
-nnoremap <Leader>u :GundoToggle<CR>
-if has('python3')
-    let g:gundo_prefer_python3 = 1
-endif
-
-" ctrlp
-" nnoremap ; :CtrlPBuffer<CR>
-let g:ctrlp_switch_buffer = 0
-let g:ctrlp_show_hidden = 1
-
 " syntastic
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -187,23 +145,6 @@ nnoremap <Leader>r :SyntasticReset<CR>
 nnoremap <Leader>i :SyntasticInfo<CR>
 nnoremap <Leader>m :SyntasticToggleMode<CR>
 
-" easymotion
-map <Space> <Plug>(easymotion-prefix)
-
-" incsearch
-map / <Plug>(incsearch-forward)
-map ? <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-
-" incsearch-easymotion
-map z/ <Plug>(incsearch-easymotion-/)
-map z? <Plug>(incsearch-easymotion-?)
-map zg/ <Plug>(incsearch-easymotion-stay)
-
-" argwrap
-nnoremap <Leader>w :ArgWrap<CR>
-
-noremap <Leader>x :OverCommandLine<CR>
 
 " markdown
 let g:markdown_fenced_languages = [

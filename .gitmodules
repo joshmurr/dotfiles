@@ -1,6 +1,3 @@
-[submodule "vim/bundle/nerdtree"]
-	path = vim/bundle/nerdtree
-	url = https://github.com/preservim/nerdtree
 [submodule "vim/bundle/syntastic"]
 	path = vim/bundle/syntastic
 	url = https://github.com/vim-syntastic/syntastic
@@ -16,9 +13,6 @@
 [submodule "vim/bundle/vim-snippets"]
 	path = vim/bundle/vim-snippets
 	url = git://github.com/honza/vim-snippets.git
-[submodule "vim/bundle/YCM-Generator"]
-	path = vim/bundle/YCM-Generator
-	url = https://github.com/rdnetto/YCM-Generator
 [submodule "vim/bundle/vim-glsl"]
 	path = vim/bundle/vim-glsl
 	url = https://github.com/tikhomirov/vim-glsl
@@ -28,21 +22,15 @@
 [submodule "vim/bundle/vim-latex"]
 	path = vim/bundle/vim-latex
 	url = https://github.com/vim-latex/vim-latex
-[submodule "vim/bundle/vim-polyglot"]
-	path = vim/bundle/vim-polyglot
-	url = https://github.com/sheerun/vim-polyglot
 [submodule "vim/bundle/ale"]
 	path = vim/bundle/ale
 	url = https://github.com/dense-analysis/ale.git
-[submodule "vim/bundle/YouCompleteMe"]
-	path = vim/bundle/YouCompleteMe
-	url = https://github.com/ycm-core/YouCompleteMe
-[submodule "vim/bundle/vim-coloresque"]
-	path = vim/bundle/vim-coloresque
-	url = https://github.com/gko/vim-coloresque
 [submodule "vim/bundle/vim-react-snippets"]
 	path = vim/bundle/vim-react-snippets
 	url = https://github.com/epilande/vim-react-snippets
 [submodule "vim/bundle/vim-es2015-snippets"]
 	path = vim/bundle/vim-es2015-snippets
 	url = https://github.com/epilande/vim-es2015-snippets
+[submodule "vim/bundle/vim-polyglot"]
+	path = vim/bundle/vim-polyglot
+	url = https://github.com/sheerun/vim-polyglot

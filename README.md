@@ -23,3 +23,10 @@ git commit -m "Add a new submodule: one-submodule"
 ```bash
 git submodule update --init --recursive
 ```
+
+### Removing Submodules
+
+```bash
+git rm vim/bundle/<Bundle Name>
+rm -rf .git/modules/vim/bundle/<Bundle Name>
+```

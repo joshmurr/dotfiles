@@ -1,11 +1,7 @@
-
-execute pathogen#infect('bundle/{}', '~/dotfiles/vim/bundle/{}')
+execute pathogen#infect('bundle/{}', '~/.dotfiles/vim/bundle/{}')
 
 set nocompatible " not vi compatible
 
-"------------------
-" Syntax and indent
-"------------------
 syntax on " turn on syntax highlighting
 set showmatch " show matching braces when text indicator is over them
 
@@ -40,11 +36,11 @@ else
 endif
 
 filetype plugin indent on " enable file type detection
-set autoindent
-
-if &diff
-    highlight! link DiffText MatchParen
-endif
+" set autoindent
+"
+" if &diff
+    " highlight! link DiffText MatchParen
+" endif
 
 "---------------------
 " Basic editing config
@@ -64,7 +60,6 @@ set timeout timeoutlen=1000 ttimeoutlen=100 " fix slow O inserts
 set lazyredraw " skip redrawing screen in some cases
 set autochdir " automatically set current directory to directory of last opened file
 set hidden " allow auto-hiding of edited buffers
-set history=8192 " more history
 set nojoinspaces " suppress inserting two spaces between sentences
 " use 4 spaces instead of tabs during formatting
 set expandtab
@@ -89,7 +84,7 @@ endif
 "--------------------
 "
 " Change <Leader> to `
-let mapleader = "`"
+let mapleader = "\\"
 
 " unbind keys
 map <C-a> <Nop>
@@ -112,9 +107,6 @@ nnoremap <C-l> <C-w>l
 " toggle relative numbering
 nnoremap <C-n> :set rnu!<CR>
 
-" save read-only files
-command -nargs=0 Sudow w !sudo tee % >/dev/null
-
 "---------------------
 " Plugin configuration
 "---------------------
@@ -126,41 +118,21 @@ let g:UltiSnipsExpandTrigger="<c-o>"
 let g:UltiSnipsJumpForwardTrigger="<C-n>"
 let g:UltiSnipsJumpBackwardTrigger="<C-p>"
 
-" nerdtree
-nnoremap <Leader>n :NERDTreeToggle<CR>
-nnoremap <Leader>f :NERDTreeFind<CR>
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" syntastic
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_mode_map = {
-    \ 'mode': 'passive',
-    \ 'active_filetypes': [],
-    \ 'passive_filetypes': []
-\}
-nnoremap <Leader>s :SyntasticCheck<CR>
-nnoremap <Leader>r :SyntasticReset<CR>
-nnoremap <Leader>i :SyntasticInfo<CR>
-nnoremap <Leader>m :SyntasticToggleMode<CR>
-
-
 " markdown
-let g:markdown_fenced_languages = [
-    \ 'bash=sh',
-    \ 'c',
-    \ 'coffee',
-    \ 'erb=eruby',
-    \ 'javascript',
-    \ 'json',
-    \ 'perl',
-    \ 'python',
-    \ 'ruby',
-    \ 'yaml',
-    \ 'go',
-\]
-let g:markdown_syntax_conceal = 0
+" let g:markdown_fenced_languages = [
+"     \ 'bash=sh',
+"     \ 'c',
+"     \ 'coffee',
+"     \ 'erb=eruby',
+"     \ 'javascript',
+"     \ 'json',
+"     \ 'perl',
+"     \ 'python',
+"     \ 'ruby',
+"     \ 'yaml',
+"     \ 'go',
+" \]
+" let g:markdown_syntax_conceal = 0
 
 " fugitive
 set tags^=.git/tags;~
@@ -180,15 +152,21 @@ let g:NERDTreeShowHidden = 1
 " Fix files with prettier, and then ESLint.
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_enter  = 0
-let g:ale_fixers = {}
-let g:ale_fixers.javascript = ['eslint']
+let g:ale_linters = {
+    \ 'python': ['flake8', 'pylint'],
+    \ 'javascript': ['eslint'],
+    \}
+let g:ale_fixers = {
+    \ 'python': ['yapf'],
+    \ 'javascript': ['eslint'],
+    \}
 nmap <F10> <Plug>(ale_fix)
 
 " YouCompleteMe
 " Let clangd fully control code completion
-let g:ycm_clangd_uses_ycmd_caching = 0
+" let g:ycm_clangd_uses_ycmd_caching = 0
 " " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
-let g:ycm_clangd_binary_path = exepath("clangd")
+" let g:ycm_clangd_binary_path = exepath("clangd")
 
 
 "---------------------

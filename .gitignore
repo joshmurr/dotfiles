@@ -1,1 +1,2 @@
 *.bak
+./nvim/plugin/*

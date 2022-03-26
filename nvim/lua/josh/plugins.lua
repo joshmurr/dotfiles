@@ -38,6 +38,26 @@ return packer.startup(function(use)
   use 'sheerun/vim-polyglot'
   use 'preservim/nerdcommenter'
 
+  -- cmp plugins
+  use "hrsh7th/nvim-cmp" -- The completion plugin
+  use "hrsh7th/cmp-buffer" -- buffer completions
+  use "hrsh7th/cmp-path" -- path completions
+  use "hrsh7th/cmp-cmdline" -- cmdline completions
+  --use "saadparwaiz1/cmp_luasnip" -- snippet completions
+  use "hrsh7th/cmp-nvim-lsp"
+  use "hrsh7th/cmp-nvim-lua"
+
+  use "nvim-lua/lsp-status.nvim"
+
+  -- LSP
+  use "neovim/nvim-lspconfig" -- enable LSP
+  use({
+    "williamboman/nvim-lsp-installer",
+    requires = "neovim/nvim-lspconfig",
+    rocks = { "json4lua"}
+    --config = [[ require("josh.lsp.lsp-installer") ]],
+  })
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then

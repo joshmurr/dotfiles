@@ -155,7 +155,7 @@ eval "$(pyenv virtualenv-init -)"
 # ALIASES
 alias im='vim'
 alias bim='vim'
-alias nv='nvim'
+alias nv='~/nvim.appimage'
 alias get_idf='. $HOME/esp/esp-idf/export.sh'
 alias reset-audio='systemctl --user restart pulseaudio'
 alias open='xdg-open'

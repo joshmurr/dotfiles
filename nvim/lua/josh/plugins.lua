@@ -58,11 +58,14 @@ return packer.startup(function(use)
   use({
     "williamboman/nvim-lsp-installer",
     requires = "neovim/nvim-lspconfig",
-    rocks = { "json4lua"}
-    --config = [[ require("josh.lsp.lsp-installer") ]],
   })
 
   use "norcalli/nvim-colorizer.lua"
+
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

@@ -39,3 +39,5 @@ alias glo='git log --graph --oneline'
 alias gst='git status'
 
 alias python='python3'
+
+alias cci='cd ~/Documents/CCI/'

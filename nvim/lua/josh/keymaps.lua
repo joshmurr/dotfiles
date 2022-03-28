@@ -1,8 +1,9 @@
 local opts = { noremap=true, silent=true }
 
-local term_opts = { silent=true }
+--local term_opts = { silent=true }
 
 local keymap = vim.api.nvim_set_keymap
+local unset = vim.api.nvim_del_keymap
 
 --Remap '\' as leader key
 -- keymap("", "\\", "<Nop>", opts)
@@ -25,6 +26,8 @@ keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
 
 keymap("n", "<leader>e", ":Lex 32<cr>", opts)
+
+unset("n", "Y")
 
 -- Resize with arrows
 keymap("n", "<C-Up>", ":resize -2<CR>", opts)

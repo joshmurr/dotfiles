@@ -62,6 +62,8 @@ return packer.startup(function(use)
     --config = [[ require("josh.lsp.lsp-installer") ]],
   })
 
+  use "norcalli/nvim-colorizer.lua"
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if PACKER_BOOTSTRAP then

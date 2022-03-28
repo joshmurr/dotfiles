@@ -4,3 +4,5 @@ require "josh.plugins"
 require "josh.colorscheme"
 require "josh.cmp"
 require "josh.lsp"
+
+require "colorizer".setup()

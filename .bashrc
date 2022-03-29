@@ -111,6 +111,7 @@ export NVM_DIR="$HOME/.nvm"
 
 # For pyenv
 export PATH="/home/joshmurr/.pyenv/bin:$PATH"
+
 #export PATH="$PATH:/home/joshmurr/Documents/Stuff/luarocks-3.8.0/./lua_modules/bin"
 #export PYENV_ROOT="$HOME/.pyenv"
 #export PATH="$PYENV_ROOT/bin:$PATH"

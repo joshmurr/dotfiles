@@ -60,6 +60,7 @@ keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 keymap("n", "<C-l>", ":nohl<CR><C-l>", opts)
 keymap("n", ":w\\", "<nop>", opts)
 keymap("n", "<F1>", "<nop>", opts)
+keymap("n", "<C-n>", ":set invnumber<CR>", opts)
 
 -- Telescope --
 keymap("n", "<leader>ff", "<cmd>lua require('telescope.builtin').find_files()<cr>", opts)

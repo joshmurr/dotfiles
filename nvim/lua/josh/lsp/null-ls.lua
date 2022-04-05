@@ -8,6 +8,14 @@ end
 local formatting = null_ls.builtins.formatting
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
 local diagnostics = null_ls.builtins.diagnostics
+local code_actions = null_ls.builtins.code_actions
+
+local function has_eslint_configured(utils)
+	local c = utils.root_has_file({ ".eslintrc", ".eslintrc.js", ".eslintrc.json" })
+	local status = "ESLint config " .. (c and "found!" or "not found :(")
+	vim.notify(status)
+	return c
+end
 
 null_ls.setup({
 	debug = false,
@@ -23,7 +31,19 @@ null_ls.setup({
 		end
 	end,
 	sources = {
-		formatting.prettier.with({ extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" } }),
+
+		code_actions.eslint_d.with({ condition = has_eslint_configured }),
+		diagnostics.eslint_d.with({ condition = has_eslint_configured }),
+		formatting.eslint_d.with({ condition = has_eslint_configured }),
+		formatting.prettierd.with({
+			-- Only register prettier if eslint_d is not running as a formatter. This
+			-- can happen if it's not configured for this project, or if it can't
+			-- handle the current filetype.
+			condition = function()
+				return #null_ls.get_source({ name = "eslint_d", method = null_ls.methods.FORMATTING }) == 0
+			end,
+		}),
+		--formatting.prettier.with({ extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" } }),
 		formatting.black,
 		formatting.stylua,
 		diagnostics.flake8,

@@ -121,8 +121,7 @@ telescope.setup({
 
 			-- Disabled by default.
 			-- Will probably slow down some aspects of the sorter, but can make color highlights.
-			-- I will work on this more later.
-			use_highlighter = true,
+			use_highlighter = false,
 		},
 	},
 })

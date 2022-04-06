@@ -67,6 +67,11 @@ return packer.startup(function(use)
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
 
+	use({
+		"nvim-telescope/telescope-fzf-writer.nvim",
+		requires = { { "junegunn/fzf.vim" }, { "duane9/nvim-rg" } },
+	})
+
 	-- Treesitter
 	use({
 		"nvim-treesitter/nvim-treesitter",

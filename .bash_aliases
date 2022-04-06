@@ -30,7 +30,7 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-alias lll='tree -I "node_modules|venv|env|bin" -L 3'
+alias lll='tree -I "node_modules|venv|env|bin|dist" -L 3'
 # Git Aliases
 alias gc='git commit'
 alias gd='git diff'

@@ -113,6 +113,7 @@ telescope.setup({
 		-- builtin picker
 		find_files = {
 			disable_devicons = true,
+			hidden = true,
 		},
 	},
 	extensions = {

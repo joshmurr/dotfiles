@@ -36,6 +36,7 @@ telescope.setup({
 		selection_caret = ">",
 		path_display = { "smart" },
 		buffer_previewer_maker = new_maker,
+		file_ignore_patterns = { "node_modules" },
 
 		mappings = {
 			i = {

@@ -35,13 +35,14 @@ null_ls.setup({
 		code_actions.eslint_d.with({ condition = has_eslint_configured }),
 		diagnostics.eslint_d.with({ condition = has_eslint_configured }),
 		formatting.eslint_d.with({ condition = has_eslint_configured }),
-		formatting.prettierd.with({
+		formatting.prettier.with({
 			-- Only register prettier if eslint_d is not running as a formatter. This
 			-- can happen if it's not configured for this project, or if it can't
 			-- handle the current filetype.
-			condition = function()
-				return #null_ls.get_source({ name = "eslint_d", method = null_ls.methods.FORMATTING }) == 0
-			end,
+			--condition = function()
+			--return #null_ls.get_source({ name = "eslint_d", method = null_ls.methods.FORMATTING }) == 0
+			--end,
+			extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" },
 		}),
 		--formatting.prettier.with({ extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" } }),
 		formatting.black,

@@ -25,6 +25,7 @@ keymap("n", "<C-j>", "<C-w>j", opts)
 keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
 
+-- Open Vim navigator
 keymap("n", "<leader>e", ":Lex 32<cr>", opts)
 
 unset("n", "Y")
@@ -60,7 +61,8 @@ keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 keymap("n", "<C-l>", ":nohl<CR><C-l>", opts)
 keymap("n", ":w\\", "<nop>", opts)
 keymap("n", "<F1>", "<nop>", opts)
-keymap("n", "<C-n>", ":set invnumber<CR>", opts)
+keymap("n", "<C-n>", ":set invnumber<CR>", opts) -- Toggle line numbers
+keymap("n", "<C-L>", ":set wrap!<CR>", opts) -- Toggle line wrap
 
 -- Telescope --
 keymap("n", "<leader>ff", "<cmd>lua require('telescope.builtin').find_files()<cr>", opts)

@@ -41,4 +41,4 @@ alias gst='git status'
 alias python='python3'
 
 alias cci='cd ~/Documents/CCI/'
-alias dotfiles='cd ~/dotfiles'
+alias dot='cd ~/dotfiles'

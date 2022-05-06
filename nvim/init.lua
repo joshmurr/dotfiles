@@ -8,5 +8,6 @@ require("josh.telescope")
 require("josh.treesitter")
 require("josh.autocmd")
 require("josh.trouble")
+require("josh.spectre")
 
 require("colorizer").setup()

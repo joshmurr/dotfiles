@@ -86,6 +86,9 @@ return packer.startup(function(use)
 	-- Colorscheme
 	use("tanvirtin/monokai.nvim")
 
+	-- Spectre - Find-and-Replace
+	use({ "nvim-pack/nvim-spectre", requires = { { "nvim-lua/plenary.nvim" } } })
+
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
 	if PACKER_BOOTSTRAP then

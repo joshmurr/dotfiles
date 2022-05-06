@@ -131,3 +131,9 @@ LS_COLORS='rs=0:di=01;34:ln=0;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd
 export LS_COLORS
 
 . "$HOME/.cargo/env"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/joshmurr/google-cloud-sdk/path.bash.inc' ]; then . '/home/joshmurr/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/joshmurr/google-cloud-sdk/completion.bash.inc' ]; then . '/home/joshmurr/google-cloud-sdk/completion.bash.inc'; fi

@@ -9,3 +9,6 @@ sudo dpkg-reconfigure xserver-xorg
 
 # Exclude file from Git diff
 git diff -- . ':(exclude)package-lock.json'
+
+# Concat Videos
+ffmpeg -f concat -safe 0 -i mylist.txt -c copy output.mp4

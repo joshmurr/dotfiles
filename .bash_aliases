@@ -42,3 +42,4 @@ alias python='python3'
 
 alias cci='cd ~/Documents/CCI/'
 alias dot='cd ~/dotfiles'
+alias piers='cd ~/Documents/piers'

@@ -37,9 +37,11 @@ alias gd='git diff'
 alias gl='git log'
 alias glo='git log --graph --oneline'
 alias gst='git status'
+alias gpo='git push origin'
 
 alias python='python3'
 
 alias cci='cd ~/Documents/CCI/'
-alias dot='cd ~/dotfiles'
+alias dots='cd ~/dotfiles'
 alias piers='cd ~/Documents/piers'
+alias gch='git checkout'

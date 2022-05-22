@@ -88,3 +88,6 @@ keymap("n", "<leader>sp", "viw:lua require('spectre').open_file_search()<cr>", o
 
 -- Diffview
 keymap("n", "<leader>D", "<cmd>lua require('diffview').file_history()<CR>", opts)
+
+-- Focus
+keymap("n", "<leader>p", "<cmd>lua require('focus').focus_toggle()<CR>", opts)

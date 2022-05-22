@@ -92,6 +92,9 @@ return packer.startup(function(use)
 	-- DiffView
 	use({ "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" })
 
+	-- Focus
+	use({ "beauwilliams/focus.nvim" })
+
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
 	if PACKER_BOOTSTRAP then

@@ -10,5 +10,6 @@ require("josh.autocmd")
 require("josh.trouble")
 require("josh.spectre")
 require("josh.diffview")
+require("josh.focus")
 
 require("colorizer").setup()

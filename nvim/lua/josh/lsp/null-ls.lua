@@ -31,7 +31,6 @@ null_ls.setup({
 		end
 	end,
 	sources = {
-
 		code_actions.eslint_d.with({ condition = has_eslint_configured }),
 		diagnostics.eslint_d.with({ condition = has_eslint_configured }),
 		formatting.eslint_d.with({ condition = has_eslint_configured }),

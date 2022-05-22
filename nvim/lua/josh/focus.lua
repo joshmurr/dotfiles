@@ -5,5 +5,6 @@ if not status_ok then
 end
 
 focus.setup({
-	width = 120,
+	enable = false,
+	width = 100,
 })

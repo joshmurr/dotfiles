@@ -63,6 +63,7 @@ keymap("n", ":w\\", "<nop>", opts)
 keymap("n", "<F1>", "<nop>", opts)
 keymap("n", "<C-n>", ":set invnumber<CR>", opts) -- Toggle line numbers
 keymap("n", "<C-p>", ":set wrap!<CR>", opts) -- Toggle line wrap
+keymap("n", ":qt", ":tabclose", opts) -- Close tab
 
 -- Telescope --
 keymap("n", "<leader>ff", "<cmd>lua require('telescope.builtin').find_files()<cr>", opts)

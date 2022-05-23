@@ -6,5 +6,5 @@ end
 
 focus.setup({
 	enable = false,
-	width = 100,
+	width = 120,
 })

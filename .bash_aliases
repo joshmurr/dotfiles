@@ -42,7 +42,10 @@ alias gpo='git push origin'
 alias python='python3'
 
 alias cci='cd ~/Documents/CCI/'
+alias teaching='cd ~/Documents/CCI/teaching'
 alias dots='cd ~/dotfiles'
 alias piers='cd ~/Documents/piers'
+alias justified='cd ~/Documents/justified'
+
 alias gch='git checkout'
 alias gg='git grep'

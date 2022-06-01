@@ -12,3 +12,9 @@ git diff -- . ':(exclude)package-lock.json'
 
 # Concat Videos
 ffmpeg -f concat -safe 0 -i mylist.txt -c copy output.mp4
+
+# Get screen dims
+xdpyinfo | grep dimensions
+
+# Fix dodgy package installs
+sudo dpkg --configure -a

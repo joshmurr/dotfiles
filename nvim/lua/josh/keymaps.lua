@@ -26,7 +26,7 @@ keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
 
 -- Open Vim navigator
-keymap("n", "<leader>e", ":Lex 32<cr>", opts)
+keymap("n", "<leader>e", ":Lex 32<CR>", opts)
 
 unset("n", "Y")
 

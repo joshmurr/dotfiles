@@ -12,7 +12,7 @@
 --  - '2'    -- I am a programmer and not a writer
 --  + 'j'    -- Join comments smartly
 
--- Workaround:
+-- Prevent newline comment workaround:
 vim.cmd([[
 	augroup prevent_newline_comment
 		autocmd!

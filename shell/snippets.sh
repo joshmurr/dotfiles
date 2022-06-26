@@ -18,3 +18,10 @@ xdpyinfo | grep dimensions
 
 # Fix dodgy package installs
 sudo dpkg --configure -a
+
+# Full system update
+sudo apt update
+sudo apt full-upgrade
+
+# Get status of caps lock
+echo -q | grep "Caps Lock" | awk '{print $4}' # off / on

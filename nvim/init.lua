@@ -11,5 +11,7 @@ require("josh.trouble")
 require("josh.spectre")
 require("josh.diffview")
 require("josh.focus")
+require("josh.cap_status")
+require("josh.todo")
 
 require("colorizer").setup()

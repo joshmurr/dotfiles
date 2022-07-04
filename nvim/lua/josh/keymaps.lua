@@ -93,3 +93,6 @@ keymap("n", "<leader>D", "<cmd>lua require('diffview').file_history()<CR>", opts
 -- Focus
 keymap("n", "<leader>p", "<cmd>lua require('focus').focus_toggle()<CR>", opts)
 keymap("n", "<leader>P", "<cmd>lua require('focus').focus_enable()<CR>", opts)
+
+-- Todo Comments
+keymap("n", "<leader>t", ":TodoTelescope<CR>", opts)

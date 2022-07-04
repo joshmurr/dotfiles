@@ -4,4 +4,6 @@ if not status_ok then
 	return
 end
 
-todo.setup()
+todo.setup({
+	signs = false,
+})

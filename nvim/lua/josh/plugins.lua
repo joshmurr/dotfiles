@@ -98,6 +98,16 @@ return packer.startup(function(use)
 	-- Conjure
 	use({ "Olical/conjure" })
 
+	-- TODO Comments
+	-- Lua
+	use({
+		"folke/todo-comments.nvim",
+		requires = "nvim-lua/plenary.nvim",
+	})
+
+	-- AutoTag
+	use({ "windwp/nvim-ts-autotag" })
+
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
 	if PACKER_BOOTSTRAP then

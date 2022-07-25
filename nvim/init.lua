@@ -13,5 +13,6 @@ require("josh.diffview")
 require("josh.focus")
 require("josh.cap_status")
 require("josh.todo")
+require("josh.autotag")
 
 require("colorizer").setup()

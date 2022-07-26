@@ -25,3 +25,6 @@ sudo apt full-upgrade
 
 # Get status of caps lock
 echo -q | grep "Caps Lock" | awk '{print $4}' # off / on
+
+# Get size of something in human readable form
+du -hs ./{thing}

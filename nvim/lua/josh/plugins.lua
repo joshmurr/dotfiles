@@ -108,6 +108,13 @@ return packer.startup(function(use)
 	-- AutoTag
 	use({ "windwp/nvim-ts-autotag" })
 
+	-- Sexp
+	use({ "guns/vim-sexp" })
+	use({ "tpope/vim-sexp-mappings-for-regular-people" })
+
+	-- Autopairs
+	use({ "jiangmiao/auto-pairs" })
+
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
 	if PACKER_BOOTSTRAP then

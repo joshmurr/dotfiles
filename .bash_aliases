@@ -49,3 +49,5 @@ alias justified='cd ~/Documents/justified'
 
 alias gch='git checkout'
 alias gg='git grep'
+
+alias nrepl="clojure -Sdeps '{:deps {nrepl/nrepl {:mvn/version \"0.7.0\"} cider/cider-nrepl {:mvn/version \"0.25.2\"}}}' -m nrepl.cmdline --middleware '[\"cider.nrepl/cider-middleware\"]'"

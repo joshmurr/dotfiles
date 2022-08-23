@@ -4,9 +4,7 @@ if not null_ls_status_ok then
 	return
 end
 
--- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
 local formatting = null_ls.builtins.formatting
--- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
 local diagnostics = null_ls.builtins.diagnostics
 local code_actions = null_ls.builtins.code_actions
 
@@ -17,17 +15,21 @@ local function has_eslint_configured(utils)
 	return c
 end
 
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
 null_ls.setup({
 	debug = false,
 	-- Format on save
-	on_attach = function(client)
-		if client.resolved_capabilities.document_formatting then
-			vim.cmd([[
-            augroup LspFormatting
-                autocmd! * <buffer>
-                autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-            augroup END
-            ]])
+	on_attach = function(client, bufnr)
+		if client.supports_method("textDocument/formatting") then
+			vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				group = augroup,
+				buffer = bufnr,
+				callback = function()
+					vim.lsp.buf.format({ bufnr = bufnr }) -- NVIM 0.8.0
+				end,
+			})
 		end
 	end,
 	sources = {
@@ -38,9 +40,9 @@ null_ls.setup({
 			-- Only register prettier if eslint_d is not running as a formatter. This
 			-- can happen if it's not configured for this project, or if it can't
 			-- handle the current filetype.
-			--condition = function()
-			--return #null_ls.get_source({ name = "eslint_d", method = null_ls.methods.FORMATTING }) == 0
-			--end,
+			condition = function()
+				return #null_ls.get_source({ name = "eslint_d", method = null_ls.methods.FORMATTING }) == 0
+			end,
 			extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" },
 		}),
 		--formatting.prettier.with({ extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" } }),

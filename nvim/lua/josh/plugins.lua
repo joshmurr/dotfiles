@@ -96,7 +96,7 @@ return packer.startup(function(use)
 	use({ "beauwilliams/focus.nvim" })
 
 	-- Conjure
-	use({ "Olical/conjure" })
+	-- use({ "Olical/conjure" })
 
 	-- TODO Comments
 	-- Lua

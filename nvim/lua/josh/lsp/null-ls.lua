@@ -27,7 +27,7 @@ null_ls.setup({
 				group = augroup,
 				buffer = bufnr,
 				callback = function()
-					vim.lsp.buf.format({ bufnr = bufnr }) -- NVIM 0.8.0
+					vim.lsp.buf.format({ bufnr = bufnr, timeout = 2000 }) -- NVIM 0.8.0
 				end,
 			})
 		end
@@ -36,7 +36,7 @@ null_ls.setup({
 		code_actions.eslint_d.with({ condition = has_eslint_configured }),
 		diagnostics.eslint_d.with({ condition = has_eslint_configured }),
 		formatting.eslint_d.with({ condition = has_eslint_configured }),
-		formatting.prettier.with({
+		formatting.prettierd.with({
 			-- Only register prettier if eslint_d is not running as a formatter. This
 			-- can happen if it's not configured for this project, or if it can't
 			-- handle the current filetype.

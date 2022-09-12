@@ -1,7 +1,8 @@
 # ALIASES
 alias im='vim'
 alias bim='vim'
-alias nv='~/nvim.appimage'
+alias nv7='~/nvim.appimage'
+alias nv='~/nvim.0.8.0.appimage'
 
 alias get_idf='. $HOME/esp/esp-idf/export.sh'
 

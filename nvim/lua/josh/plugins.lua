@@ -35,7 +35,7 @@ return packer.startup(function(use)
 
 	use("nvim-lua/plenary.nvim") -- Useful lua functions used ny lots of plugins
 	use("sheerun/vim-polyglot")
-	use("preservim/nerdcommenter")
+	--use("preservim/nerdcommenter")
 
 	-- cmp plugins
 	use("hrsh7th/nvim-cmp") -- The completion plugin
@@ -114,6 +114,10 @@ return packer.startup(function(use)
 
 	-- Autopairs
 	use({ "jiangmiao/auto-pairs" })
+
+	-- Comment
+	use({ "numToStr/Comment.nvim" })
+	use({ "JoosepAlviste/nvim-ts-context-commentstring" })
 
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins

@@ -14,5 +14,6 @@ require("josh.focus")
 require("josh.cap_status")
 require("josh.todo")
 require("josh.autotag")
+require("josh.comment")
 
 require("colorizer").setup()

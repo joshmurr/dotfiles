@@ -1,0 +1,3 @@
+[submodule "nvim-murr"]
+	path = nvim-murr
+	url = git@github.com:joshmurr/nvim-murr.git

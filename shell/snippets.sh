@@ -36,3 +36,17 @@ npm run dev -- -H 0.0.0.0
 
 # Run a Conjure REPL
 clojure -Sdeps '{:deps {nrepl {:mvn/version "0.7.0"} cider/cider-nrepl {:mvn/version "0.25.0"}}}' -m nrepl.cmdline --middleware '["cider.nrepl/cider-middleware"]'
+clj -Sdeps '{:deps {nrepl/nrepl {:mvn/version "0.9.0"} cider/cider-nrepl {:mvn/version "0.28.4"}}}' -m nrepl.cmdline --middleware '["cider.nrepl/cider-middleware"]' --interactive
+
+# Get LOC in Git repo
+find ./src/ -type f -name '*.ts' | xargs wc -l
+
+# Unshallow a Git repo - in this case Conjure
+cd ~/.local/share/nvim/site/pack/packer/start/conjure/
+git fetch --unshallow
+
+# Reset Trackpad
+sudo modprobe -r hid_multitouch && sudo modprobe hid_multitouch
+
+# Run Conky
+conky -c ~/dotfiles/conky/.conkyrc

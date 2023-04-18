@@ -17,4 +17,4 @@ ln -ns /home/user/dotfiles/thing/ /home/user/.config
 
 ### TODO
 
-[ ] Write a script to install the above.
+- [ ] Write a script to install the above.

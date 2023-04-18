@@ -10,7 +10,11 @@ ln -ns /home/user/dotfiles/thing/ /home/user/.config
 
 ### NOTES
 
-Install Rust + Cargo
-Install treesitter-cli
-Install Node
-Install stylua lua-language-server ripgrep homebrew conky gcalcli
+- Install Rust + Cargo
+- Install treesitter-cli
+- Install Node
+- Install stylua lua-language-server ripgrep homebrew conky gcalcli
+
+### TODO
+
+[ ] - Write a script to install the above.

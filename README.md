@@ -10,10 +10,12 @@ ln -ns /home/user/dotfiles/thing/ /home/user/.config
 
 ### NOTES
 
+<<<<<<< HEAD
 - Install Rust + Cargo
 - Install treesitter-cli
 - Install Node
 - Install stylua lua-language-server ripgrep homebrew conky gcalcli
+npm i -g vercel gatsby
 
 ### TODO
 
